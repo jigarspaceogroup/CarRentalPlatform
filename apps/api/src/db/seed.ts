@@ -1,6 +1,13 @@
-import { PrismaClient } from '@prisma/client';
+import dotenv from 'dotenv';
+import path from 'path';
 
-const prisma = new PrismaClient();
+dotenv.config({ path: path.resolve(__dirname, '../../../../.env') });
+
+import { PrismaClient } from '@prisma/client';
+import { PrismaPg } from '@prisma/adapter-pg';
+
+const adapter = new PrismaPg({ connectionString: process.env.DATABASE_URL! });
+const prisma = new PrismaClient({ adapter });
 
 async function main() {
   console.log('🌱 Starting seed...');
@@ -118,6 +125,8 @@ async function main() {
   for (const branchId of branchIds) {
     for (let day = 0; day < 7; day++) {
       const isFriday = day === 5;
+      const openHour = isFriday ? 14 : 8;
+      const closeHour = 22;
       await prisma.branchOperatingHour.upsert({
         where: {
           branchId_dayOfWeek: { branchId, dayOfWeek: day },
@@ -127,8 +136,8 @@ async function main() {
           branchId,
           dayOfWeek: day,
           isClosed: false,
-          openTime: isFriday ? '14:00' : '08:00',
-          closeTime: isFriday ? '22:00' : '22:00',
+          openTime: new Date(`1970-01-01T${String(openHour).padStart(2, '0')}:00:00.000Z`),
+          closeTime: new Date(`1970-01-01T${String(closeHour).padStart(2, '0')}:00:00.000Z`),
         },
       });
     }
