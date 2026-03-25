@@ -1,0 +1,952 @@
+// Car Rental Platform - Prisma Schema
+// Database: PostgreSQL (single-tenant, one DB per service provider)
+// Generated from: docs/DATABASE_SCHEMA.md v1.0
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// ──────────────────────────────────────────────
+// Enumerations
+// ──────────────────────────────────────────────
+
+enum AuthProvider {
+  EMAIL
+  PHONE
+  GOOGLE
+  APPLE
+  FACEBOOK
+}
+
+enum UserStatus {
+  ACTIVE
+  SUSPENDED
+  DEACTIVATED
+}
+
+enum StaffRole {
+  ADMIN
+  MANAGER
+  OPERATOR
+  SUPPORT
+}
+
+enum StaffStatus {
+  ACTIVE
+  INACTIVE
+}
+
+enum VehicleStatus {
+  AVAILABLE
+  UNAVAILABLE
+  IN_MAINTENANCE
+  RETIRED
+}
+
+enum TransmissionType {
+  AUTOMATIC
+  MANUAL
+}
+
+enum FuelType {
+  PETROL
+  DIESEL
+  ELECTRIC
+  HYBRID
+}
+
+enum BookingStatus {
+  PENDING
+  CONFIRMED
+  VEHICLE_PREPARING
+  READY_FOR_PICKUP
+  ACTIVE_RENTAL
+  RETURN_PENDING
+  COMPLETED
+  CANCELLED
+  REJECTED
+}
+
+enum CancellationInitiator {
+  CUSTOMER
+  SERVICE_PROVIDER
+}
+
+enum OtpStatus {
+  GENERATED
+  DELIVERED
+  USED
+  EXPIRED
+  INVALIDATED
+}
+
+enum OtpChannel {
+  SMS
+  PUSH
+  BOTH
+}
+
+enum PaymentMethod {
+  CREDIT_CARD
+  DEBIT_CARD
+  CASH_ON_DELIVERY
+}
+
+enum PaymentStatus {
+  PENDING
+  COMPLETED
+  FAILED
+  REFUNDED
+  PARTIALLY_REFUNDED
+}
+
+enum RefundStatus {
+  PENDING
+  PROCESSED
+  FAILED
+}
+
+enum NotificationType {
+  BOOKING_CONFIRMATION
+  BOOKING_STATUS_CHANGE
+  OTP_DELIVERY
+  PAYMENT_CONFIRMATION
+  PROMOTIONAL
+  SYSTEM
+}
+
+enum LoyaltyType {
+  EARNED
+  REDEEMED
+  EXPIRED
+  ADJUSTED
+}
+
+enum TicketStatus {
+  OPEN
+  IN_PROGRESS
+  RESOLVED
+  CLOSED
+}
+
+enum TicketPriority {
+  LOW
+  MEDIUM
+  HIGH
+}
+
+enum TicketCategory {
+  BILLING
+  VEHICLE_ISSUE
+  GENERAL_INQUIRY
+  COMPLAINT
+}
+
+enum DiscountType {
+  PERCENTAGE
+  FIXED_AMOUNT
+}
+
+enum PricingRuleType {
+  MULTIPLIER
+  FIXED_OVERRIDE
+}
+
+enum MaintenanceType {
+  ROUTINE
+  REPAIR
+  INSPECTION
+}
+
+enum DocumentType {
+  INSURANCE
+  REGISTRATION
+  INSPECTION_CERTIFICATE
+  CUSTOM
+}
+
+enum RentalDocType {
+  CONTRACT
+  RECEIPT
+}
+
+enum CampaignStatus {
+  DRAFT
+  ACTIVE
+  PAUSED
+  COMPLETED
+}
+
+enum CampaignTarget {
+  ALL_CUSTOMERS
+  NEW_CUSTOMERS
+  REPEAT_CUSTOMERS
+}
+
+// ──────────────────────────────────────────────
+// 4.1 Authentication & Users
+// ──────────────────────────────────────────────
+
+model User {
+  id                   String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  email                String?   @db.VarChar(255)
+  phone                String?   @db.VarChar(20)
+  passwordHash         String?   @map("password_hash") @db.VarChar(255)
+  fullName             String    @map("full_name") @db.VarChar(255)
+  profilePhotoUrl      String?   @map("profile_photo_url") @db.Text
+  drivingLicenseNumber String?   @map("driving_license_number") @db.VarChar(100)
+  authProvider         AuthProvider @map("auth_provider")
+  authProviderId       String?   @map("auth_provider_id") @db.VarChar(255)
+  emailVerified        Boolean   @default(false) @map("email_verified")
+  phoneVerified        Boolean   @default(false) @map("phone_verified")
+  status               UserStatus @default(ACTIVE)
+  suspensionReason     String?   @map("suspension_reason") @db.Text
+  preferredLanguage    String    @default("en") @map("preferred_language") @db.VarChar(5)
+  loyaltyPointsBalance Int       @default(0) @map("loyalty_points_balance")
+  fcmToken             String?   @map("fcm_token") @db.Text
+  createdAt            DateTime  @default(now()) @map("created_at") @db.Timestamptz()
+  updatedAt            DateTime  @default(now()) @updatedAt @map("updated_at") @db.Timestamptz()
+  deletedAt            DateTime? @map("deleted_at") @db.Timestamptz()
+
+  // Relations
+  sessions                UserSession[]
+  savedCards              SavedCard[]
+  addresses               UserAddress[]
+  bookings                Booking[]
+  notifications           Notification[]
+  notificationPreferences NotificationPreference?
+  loyaltyTransactions     LoyaltyTransaction[]
+  supportTickets          SupportTicket[]
+  discountCodeUsages      DiscountCodeUsage[]
+  bookingStatusChanges    BookingStatusHistory[] @relation("StatusChangedByUser")
+
+  @@unique([email], map: "uq_users_email")
+  @@unique([phone], map: "uq_users_phone")
+  @@index([status], map: "idx_users_status")
+  @@index([authProvider, authProviderId], map: "idx_users_auth_provider")
+  @@map("users")
+}
+
+model UserSession {
+  id           String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId       String    @map("user_id") @db.Uuid
+  refreshToken String    @unique @map("refresh_token") @db.VarChar(512)
+  deviceInfo   String?   @map("device_info") @db.Text
+  ipAddress    String?   @map("ip_address") @db.VarChar(45)
+  expiresAt    DateTime  @map("expires_at") @db.Timestamptz()
+  createdAt    DateTime  @default(now()) @map("created_at") @db.Timestamptz()
+  revokedAt    DateTime? @map("revoked_at") @db.Timestamptz()
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId], map: "idx_user_sessions_user_id")
+  @@index([refreshToken], map: "idx_user_sessions_refresh_token")
+  @@index([expiresAt], map: "idx_user_sessions_expires_at")
+  @@map("user_sessions")
+}
+
+model SavedCard {
+  id           String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId       String   @map("user_id") @db.Uuid
+  gatewayToken String   @map("gateway_token") @db.VarChar(255)
+  lastFour     String   @map("last_four") @db.Char(4)
+  cardBrand    String   @map("card_brand") @db.VarChar(50)
+  expiryMonth  Int      @map("expiry_month") @db.SmallInt
+  expiryYear   Int      @map("expiry_year") @db.SmallInt
+  isDefault    Boolean  @default(false) @map("is_default")
+  createdAt    DateTime @default(now()) @map("created_at") @db.Timestamptz()
+
+  user     User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  payments Payment[]
+
+  @@index([userId], map: "idx_saved_cards_user_id")
+  @@map("saved_cards")
+}
+
+model UserAddress {
+  id          String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId      String   @map("user_id") @db.Uuid
+  label       String   @db.VarChar(50)
+  fullAddress String   @map("full_address") @db.Text
+  latitude    Decimal? @db.Decimal(10, 7)
+  longitude   Decimal? @db.Decimal(10, 7)
+  isDefault   Boolean  @default(false) @map("is_default")
+  createdAt   DateTime @default(now()) @map("created_at") @db.Timestamptz()
+  updatedAt   DateTime @default(now()) @updatedAt @map("updated_at") @db.Timestamptz()
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId], map: "idx_user_addresses_user_id")
+  @@map("user_addresses")
+}
+
+// ──────────────────────────────────────────────
+// 4.2 Staff Management
+// ──────────────────────────────────────────────
+
+model StaffMember {
+  id           String      @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  email        String      @unique @db.VarChar(255)
+  passwordHash String      @map("password_hash") @db.VarChar(255)
+  fullName     String      @map("full_name") @db.VarChar(255)
+  phone        String?     @db.VarChar(20)
+  role         StaffRole
+  status       StaffStatus @default(ACTIVE)
+  lastLoginAt  DateTime?   @map("last_login_at") @db.Timestamptz()
+  createdAt    DateTime    @default(now()) @map("created_at") @db.Timestamptz()
+  updatedAt    DateTime    @default(now()) @updatedAt @map("updated_at") @db.Timestamptz()
+
+  // Relations
+  activityLogs         StaffActivityLog[]
+  bookingNotes         BookingNote[]
+  bookingStatusChanges BookingStatusHistory[] @relation("StatusChangedByStaff")
+  generatedOtps        Otp[]
+  processedRefunds     Refund[]
+  maintenanceRecords   MaintenanceRecord[]
+  assignedTickets      SupportTicket[]
+  ticketMessages       TicketMessage[]
+  businessSettings     BusinessSetting[]
+
+  @@index([role], map: "idx_staff_members_role")
+  @@map("staff_members")
+}
+
+model StaffActivityLog {
+  id         String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  staffId    String   @map("staff_id") @db.Uuid
+  action     String   @db.VarChar(100)
+  entityType String?  @map("entity_type") @db.VarChar(50)
+  entityId   String?  @map("entity_id") @db.Uuid
+  details    Json?    @db.JsonB
+  ipAddress  String?  @map("ip_address") @db.VarChar(45)
+  createdAt  DateTime @default(now()) @map("created_at") @db.Timestamptz()
+
+  staff StaffMember @relation(fields: [staffId], references: [id], onDelete: Cascade)
+
+  @@index([staffId], map: "idx_staff_activity_logs_staff_id")
+  @@index([action], map: "idx_staff_activity_logs_action")
+  @@index([createdAt], map: "idx_staff_activity_logs_created_at")
+  @@map("staff_activity_logs")
+}
+
+// ──────────────────────────────────────────────
+// 4.3 Fleet Management
+// ──────────────────────────────────────────────
+
+model VehicleCategory {
+  id            String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  parentId      String?  @map("parent_id") @db.Uuid
+  nameEn        String   @map("name_en") @db.VarChar(100)
+  nameAr        String   @map("name_ar") @db.VarChar(100)
+  descriptionEn String?  @map("description_en") @db.Text
+  descriptionAr String?  @map("description_ar") @db.Text
+  imageUrl      String?  @map("image_url") @db.Text
+  sortOrder     Int      @default(0) @map("sort_order")
+  isActive      Boolean  @default(true) @map("is_active")
+  createdAt     DateTime @default(now()) @map("created_at") @db.Timestamptz()
+  updatedAt     DateTime @default(now()) @updatedAt @map("updated_at") @db.Timestamptz()
+
+  // Self-relation for subcategories
+  parent        VehicleCategory?  @relation("CategoryHierarchy", fields: [parentId], references: [id], onDelete: SetNull)
+  subcategories VehicleCategory[] @relation("CategoryHierarchy")
+
+  // Relations
+  vehicles             Vehicle[]
+  seasonalPricingRules SeasonalPricingRule[]
+
+  @@index([parentId], map: "idx_vehicle_categories_parent_id")
+  @@index([sortOrder], map: "idx_vehicle_categories_sort_order")
+  @@map("vehicle_categories")
+}
+
+model Vehicle {
+  id            String         @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  categoryId    String         @map("category_id") @db.Uuid
+  branchId      String         @map("branch_id") @db.Uuid
+  make          String         @db.VarChar(100)
+  model         String         @db.VarChar(100)
+  year          Int            @db.SmallInt
+  licensePlate  String         @map("license_plate") @db.VarChar(20)
+  transmission  TransmissionType
+  fuelType      FuelType       @map("fuel_type")
+  seats         Int            @db.SmallInt
+  doors         Int            @db.SmallInt
+  trunkCapacity String?        @map("trunk_capacity") @db.VarChar(50)
+  mileagePolicy String?        @map("mileage_policy") @db.Text
+  features      Json           @default("[]") @db.JsonB
+  dailyRate     Decimal        @map("daily_rate") @db.Decimal(10, 2)
+  weeklyRate    Decimal?       @map("weekly_rate") @db.Decimal(10, 2)
+  monthlyRate   Decimal?       @map("monthly_rate") @db.Decimal(10, 2)
+  longTermRate  Decimal?       @map("long_term_rate") @db.Decimal(10, 2)
+  status        VehicleStatus  @default(AVAILABLE)
+  createdAt     DateTime       @default(now()) @map("created_at") @db.Timestamptz()
+  updatedAt     DateTime       @default(now()) @updatedAt @map("updated_at") @db.Timestamptz()
+  deletedAt     DateTime?      @map("deleted_at") @db.Timestamptz()
+
+  // Relations
+  category             VehicleCategory      @relation(fields: [categoryId], references: [id])
+  branch               Branch               @relation(fields: [branchId], references: [id])
+  images               VehicleImage[]
+  bookings             Booking[]
+  maintenanceRecords   MaintenanceRecord[]
+  documents            VehicleDocument[]
+  seasonalPricingRules SeasonalPricingRule[]
+
+  @@unique([licensePlate], map: "uq_vehicles_license_plate")
+  @@index([categoryId], map: "idx_vehicles_category_id")
+  @@index([branchId], map: "idx_vehicles_branch_id")
+  @@index([status], map: "idx_vehicles_status")
+  @@index([make, model], map: "idx_vehicles_make_model")
+  @@index([fuelType], map: "idx_vehicles_fuel_type")
+  @@index([transmission], map: "idx_vehicles_transmission")
+  @@index([dailyRate], map: "idx_vehicles_daily_rate")
+  @@index([status, categoryId], map: "idx_vehicles_status_category")
+  @@map("vehicles")
+}
+
+model VehicleImage {
+  id           String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  vehicleId    String   @map("vehicle_id") @db.Uuid
+  imageUrl     String   @map("image_url") @db.Text
+  thumbnailUrl String?  @map("thumbnail_url") @db.Text
+  sortOrder    Int      @default(0) @map("sort_order")
+  createdAt    DateTime @default(now()) @map("created_at") @db.Timestamptz()
+
+  vehicle Vehicle @relation(fields: [vehicleId], references: [id], onDelete: Cascade)
+
+  @@index([vehicleId], map: "idx_vehicle_images_vehicle_id")
+  @@map("vehicle_images")
+}
+
+// ──────────────────────────────────────────────
+// 4.4 Branches & Locations
+// ──────────────────────────────────────────────
+
+model Branch {
+  id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  nameEn    String   @map("name_en") @db.VarChar(150)
+  nameAr    String   @map("name_ar") @db.VarChar(150)
+  addressEn String   @map("address_en") @db.Text
+  addressAr String   @map("address_ar") @db.Text
+  latitude  Decimal  @db.Decimal(10, 7)
+  longitude Decimal  @db.Decimal(10, 7)
+  phone     String?  @db.VarChar(20)
+  email     String?  @db.VarChar(255)
+  isActive  Boolean  @default(true) @map("is_active")
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz()
+  updatedAt DateTime @default(now()) @updatedAt @map("updated_at") @db.Timestamptz()
+
+  // Relations
+  operatingHours  BranchOperatingHour[]
+  vehicles        Vehicle[]
+  pickupBookings  Booking[]             @relation("PickupBranch")
+  dropoffBookings Booking[]             @relation("DropoffBranch")
+
+  @@index([isActive], map: "idx_branches_is_active")
+  @@map("branches")
+}
+
+model BranchOperatingHour {
+  id        String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  branchId  String    @map("branch_id") @db.Uuid
+  dayOfWeek Int       @map("day_of_week") @db.SmallInt // 0=Sunday ... 6=Saturday
+  isClosed  Boolean   @default(false) @map("is_closed")
+  openTime  DateTime? @map("open_time") @db.Time()
+  closeTime DateTime? @map("close_time") @db.Time()
+
+  branch Branch @relation(fields: [branchId], references: [id], onDelete: Cascade)
+
+  @@unique([branchId, dayOfWeek], map: "uq_branch_operating_hours")
+  @@index([branchId], map: "idx_branch_operating_hours_branch_id")
+  @@map("branch_operating_hours")
+}
+
+// ──────────────────────────────────────────────
+// 4.5 Bookings
+// ──────────────────────────────────────────────
+
+model Booking {
+  id                     String                 @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  referenceNumber        String                 @unique @map("reference_number") @db.VarChar(20)
+  userId                 String                 @map("user_id") @db.Uuid
+  vehicleId              String                 @map("vehicle_id") @db.Uuid
+  pickupBranchId         String                 @map("pickup_branch_id") @db.Uuid
+  dropoffBranchId        String                 @map("dropoff_branch_id") @db.Uuid
+  discountCodeId         String?                @map("discount_code_id") @db.Uuid
+  status                 BookingStatus          @default(PENDING)
+  pickupDate             DateTime               @map("pickup_date") @db.Timestamptz()
+  dropoffDate            DateTime               @map("dropoff_date") @db.Timestamptz()
+  actualPickupDate       DateTime?              @map("actual_pickup_date") @db.Timestamptz()
+  actualDropoffDate      DateTime?              @map("actual_dropoff_date") @db.Timestamptz()
+  rentalPlan             String                 @default("daily") @map("rental_plan") @db.VarChar(20)
+  baseAmount             Decimal                @map("base_amount") @db.Decimal(10, 2)
+  extrasAmount           Decimal                @default(0) @map("extras_amount") @db.Decimal(10, 2)
+  discountAmount         Decimal                @default(0) @map("discount_amount") @db.Decimal(10, 2)
+  taxAmount              Decimal                @default(0) @map("tax_amount") @db.Decimal(10, 2)
+  serviceFee             Decimal                @default(0) @map("service_fee") @db.Decimal(10, 2)
+  totalAmount            Decimal                @map("total_amount") @db.Decimal(10, 2)
+  loyaltyPointsEarned    Int                    @default(0) @map("loyalty_points_earned")
+  loyaltyPointsRedeemed  Int                    @default(0) @map("loyalty_points_redeemed")
+  cancellationReason     String?                @map("cancellation_reason") @db.Text
+  cancellationInitiatedBy CancellationInitiator? @map("cancellation_initiated_by")
+  contractSignedAt       DateTime?              @map("contract_signed_at") @db.Timestamptz()
+  termsAcceptedAt        DateTime               @map("terms_accepted_at") @db.Timestamptz()
+  createdAt              DateTime               @default(now()) @map("created_at") @db.Timestamptz()
+  updatedAt              DateTime               @default(now()) @updatedAt @map("updated_at") @db.Timestamptz()
+
+  // Relations
+  user            User              @relation(fields: [userId], references: [id])
+  vehicle         Vehicle           @relation(fields: [vehicleId], references: [id])
+  pickupBranch    Branch            @relation("PickupBranch", fields: [pickupBranchId], references: [id])
+  dropoffBranch   Branch            @relation("DropoffBranch", fields: [dropoffBranchId], references: [id])
+  discountCode    DiscountCode?     @relation(fields: [discountCodeId], references: [id])
+  extras          BookingExtra[]
+  statusHistory   BookingStatusHistory[]
+  notes           BookingNote[]
+  otps            Otp[]
+  payments        Payment[]
+  loyaltyTransactions LoyaltyTransaction[]
+  supportTickets  SupportTicket[]
+  rentalDocuments RentalDocument[]
+  discountCodeUsages DiscountCodeUsage[]
+
+  @@index([userId], map: "idx_bookings_user_id")
+  @@index([vehicleId], map: "idx_bookings_vehicle_id")
+  @@index([status], map: "idx_bookings_status")
+  @@index([pickupDate], map: "idx_bookings_pickup_date")
+  @@index([dropoffDate], map: "idx_bookings_dropoff_date")
+  @@index([pickupBranchId], map: "idx_bookings_pickup_branch_id")
+  @@index([dropoffBranchId], map: "idx_bookings_dropoff_branch_id")
+  @@index([createdAt], map: "idx_bookings_created_at")
+  @@index([userId, status], map: "idx_bookings_user_status")
+  @@index([vehicleId, pickupDate, dropoffDate], map: "idx_bookings_vehicle_dates")
+  @@index([pickupBranchId, pickupDate], map: "idx_bookings_branch_pickup_date")
+  @@map("bookings")
+}
+
+model BookingExtra {
+  id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  bookingId String   @map("booking_id") @db.Uuid
+  nameEn    String   @map("name_en") @db.VarChar(100)
+  nameAr    String   @map("name_ar") @db.VarChar(100)
+  price     Decimal  @db.Decimal(10, 2)
+  quantity  Int      @default(1) @db.SmallInt
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz()
+
+  booking Booking @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+
+  @@index([bookingId], map: "idx_booking_extras_booking_id")
+  @@map("booking_extras")
+}
+
+model BookingStatusHistory {
+  id               String        @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  bookingId        String        @map("booking_id") @db.Uuid
+  fromStatus       BookingStatus? @map("from_status")
+  toStatus         BookingStatus @map("to_status")
+  changedByStaffId String?       @map("changed_by_staff_id") @db.Uuid
+  changedByUserId  String?       @map("changed_by_user_id") @db.Uuid
+  note             String?       @db.Text
+  createdAt        DateTime      @default(now()) @map("created_at") @db.Timestamptz()
+
+  booking        Booking      @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+  changedByStaff StaffMember? @relation("StatusChangedByStaff", fields: [changedByStaffId], references: [id], onDelete: SetNull)
+  changedByUser  User?        @relation("StatusChangedByUser", fields: [changedByUserId], references: [id], onDelete: SetNull)
+
+  @@index([bookingId], map: "idx_booking_status_history_booking_id")
+  @@index([createdAt], map: "idx_booking_status_history_created_at")
+  @@map("booking_status_history")
+}
+
+model BookingNote {
+  id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  bookingId String   @map("booking_id") @db.Uuid
+  staffId   String   @map("staff_id") @db.Uuid
+  content   String   @db.Text
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz()
+
+  booking Booking     @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+  staff   StaffMember @relation(fields: [staffId], references: [id])
+
+  @@index([bookingId], map: "idx_booking_notes_booking_id")
+  @@map("booking_notes")
+}
+
+// ──────────────────────────────────────────────
+// 4.6 OTP
+// ──────────────────────────────────────────────
+
+model Otp {
+  id                 String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  bookingId          String    @map("booking_id") @db.Uuid
+  code               String    @db.Char(6)
+  status             OtpStatus @default(GENERATED)
+  channel            OtpChannel @default(BOTH)
+  generatedByStaffId String?   @map("generated_by_staff_id") @db.Uuid
+  deliveredAt        DateTime? @map("delivered_at") @db.Timestamptz()
+  usedAt             DateTime? @map("used_at") @db.Timestamptz()
+  expiresAt          DateTime  @map("expires_at") @db.Timestamptz()
+  createdAt          DateTime  @default(now()) @map("created_at") @db.Timestamptz()
+
+  booking          Booking      @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+  generatedByStaff StaffMember? @relation(fields: [generatedByStaffId], references: [id], onDelete: SetNull)
+
+  @@index([bookingId], map: "idx_otps_booking_id")
+  @@index([status], map: "idx_otps_status")
+  @@index([expiresAt], map: "idx_otps_expires_at")
+  @@map("otps")
+}
+
+// ──────────────────────────────────────────────
+// 4.7 Payments & Refunds
+// ──────────────────────────────────────────────
+
+model Payment {
+  id                   String        @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  bookingId            String        @map("booking_id") @db.Uuid
+  amount               Decimal       @db.Decimal(10, 2)
+  currency             String        @default("SAR") @db.Char(3)
+  method               PaymentMethod
+  status               PaymentStatus @default(PENDING)
+  gatewayTransactionId String?       @map("gateway_transaction_id") @db.VarChar(255)
+  gatewayResponse      Json?         @map("gateway_response") @db.JsonB
+  savedCardId          String?       @map("saved_card_id") @db.Uuid
+  paidAt               DateTime?     @map("paid_at") @db.Timestamptz()
+  createdAt            DateTime      @default(now()) @map("created_at") @db.Timestamptz()
+  updatedAt            DateTime      @default(now()) @updatedAt @map("updated_at") @db.Timestamptz()
+
+  booking   Booking    @relation(fields: [bookingId], references: [id])
+  savedCard SavedCard? @relation(fields: [savedCardId], references: [id], onDelete: SetNull)
+  refunds   Refund[]
+
+  @@index([bookingId], map: "idx_payments_booking_id")
+  @@index([status], map: "idx_payments_status")
+  @@index([method], map: "idx_payments_method")
+  @@index([gatewayTransactionId], map: "idx_payments_gateway_transaction_id")
+  @@index([paidAt], map: "idx_payments_paid_at")
+  @@index([bookingId, status], map: "idx_payments_booking_status")
+  @@map("payments")
+}
+
+model Refund {
+  id                 String       @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  paymentId          String       @map("payment_id") @db.Uuid
+  amount             Decimal      @db.Decimal(10, 2)
+  reason             String       @db.Text
+  status             RefundStatus @default(PENDING)
+  gatewayRefundId    String?      @map("gateway_refund_id") @db.VarChar(255)
+  processedByStaffId String?      @map("processed_by_staff_id") @db.Uuid
+  processedAt        DateTime?    @map("processed_at") @db.Timestamptz()
+  createdAt          DateTime     @default(now()) @map("created_at") @db.Timestamptz()
+
+  payment          Payment      @relation(fields: [paymentId], references: [id])
+  processedByStaff StaffMember? @relation(fields: [processedByStaffId], references: [id], onDelete: SetNull)
+
+  @@index([paymentId], map: "idx_refunds_payment_id")
+  @@index([status], map: "idx_refunds_status")
+  @@map("refunds")
+}
+
+// ──────────────────────────────────────────────
+// 4.8 Pricing & Promotions
+// ──────────────────────────────────────────────
+
+model SeasonalPricingRule {
+  id         String          @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  vehicleId  String?         @map("vehicle_id") @db.Uuid
+  categoryId String?         @map("category_id") @db.Uuid
+  name       String          @db.VarChar(100)
+  ruleType   PricingRuleType @map("rule_type")
+  value      Decimal         @db.Decimal(10, 2)
+  startDate  DateTime        @map("start_date") @db.Date
+  endDate    DateTime        @map("end_date") @db.Date
+  isActive   Boolean         @default(true) @map("is_active")
+  createdAt  DateTime        @default(now()) @map("created_at") @db.Timestamptz()
+  updatedAt  DateTime        @default(now()) @updatedAt @map("updated_at") @db.Timestamptz()
+
+  vehicle  Vehicle?         @relation(fields: [vehicleId], references: [id], onDelete: Cascade)
+  category VehicleCategory? @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+
+  @@index([vehicleId], map: "idx_seasonal_pricing_vehicle_id")
+  @@index([categoryId], map: "idx_seasonal_pricing_category_id")
+  @@index([startDate, endDate], map: "idx_seasonal_pricing_dates")
+  @@map("seasonal_pricing_rules")
+}
+
+model DiscountCode {
+  id                    String       @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  code                  String       @unique @db.VarChar(50)
+  description           String?      @db.Text
+  discountType          DiscountType @map("discount_type")
+  discountValue         Decimal      @map("discount_value") @db.Decimal(10, 2)
+  maxDiscountAmount     Decimal?     @map("max_discount_amount") @db.Decimal(10, 2)
+  minBookingAmount      Decimal?     @map("min_booking_amount") @db.Decimal(10, 2)
+  usageLimit            Int?         @map("usage_limit")
+  usageCount            Int          @default(0) @map("usage_count")
+  perUserLimit          Int?         @map("per_user_limit")
+  applicableVehicleIds  String[]     @map("applicable_vehicle_ids") @db.Uuid
+  applicableCategoryIds String[]     @map("applicable_category_ids") @db.Uuid
+  startsAt              DateTime     @map("starts_at") @db.Timestamptz()
+  expiresAt             DateTime     @map("expires_at") @db.Timestamptz()
+  isActive              Boolean      @default(true) @map("is_active")
+  createdAt             DateTime     @default(now()) @map("created_at") @db.Timestamptz()
+  updatedAt             DateTime     @default(now()) @updatedAt @map("updated_at") @db.Timestamptz()
+
+  bookings  Booking[]
+  usages    DiscountCodeUsage[]
+  campaigns Campaign[]
+
+  @@index([isActive], map: "idx_discount_codes_is_active")
+  @@index([expiresAt], map: "idx_discount_codes_expires_at")
+  @@map("discount_codes")
+}
+
+model DiscountCodeUsage {
+  id              String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  discountCodeId  String   @map("discount_code_id") @db.Uuid
+  userId          String   @map("user_id") @db.Uuid
+  bookingId       String   @map("booking_id") @db.Uuid
+  discountApplied Decimal  @map("discount_applied") @db.Decimal(10, 2)
+  createdAt       DateTime @default(now()) @map("created_at") @db.Timestamptz()
+
+  discountCode DiscountCode @relation(fields: [discountCodeId], references: [id])
+  user         User         @relation(fields: [userId], references: [id])
+  booking      Booking      @relation(fields: [bookingId], references: [id])
+
+  @@index([discountCodeId], map: "idx_discount_code_usages_code_id")
+  @@index([userId], map: "idx_discount_code_usages_user_id")
+  @@map("discount_code_usages")
+}
+
+// ──────────────────────────────────────────────
+// 4.9 Notifications
+// ──────────────────────────────────────────────
+
+model Notification {
+  id        String           @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId    String           @map("user_id") @db.Uuid
+  type      NotificationType
+  titleEn   String           @map("title_en") @db.VarChar(255)
+  titleAr   String           @map("title_ar") @db.VarChar(255)
+  bodyEn    String           @map("body_en") @db.Text
+  bodyAr    String           @map("body_ar") @db.Text
+  deepLink  String?          @map("deep_link") @db.Text
+  metadata  Json?            @db.JsonB
+  isRead    Boolean          @default(false) @map("is_read")
+  sentAt    DateTime?        @map("sent_at") @db.Timestamptz()
+  createdAt DateTime         @default(now()) @map("created_at") @db.Timestamptz()
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId], map: "idx_notifications_user_id")
+  @@index([type], map: "idx_notifications_type")
+  @@index([userId, isRead], map: "idx_notifications_user_unread")
+  @@index([createdAt], map: "idx_notifications_created_at")
+  @@map("notifications")
+}
+
+model NotificationPreference {
+  id             String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId         String   @unique @map("user_id") @db.Uuid
+  bookingUpdates Boolean  @default(true) @map("booking_updates")
+  promotional    Boolean  @default(true)
+  reminders      Boolean  @default(true)
+  updatedAt      DateTime @default(now()) @updatedAt @map("updated_at") @db.Timestamptz()
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("notification_preferences")
+}
+
+// ──────────────────────────────────────────────
+// 4.10 Loyalty & Rewards
+// ──────────────────────────────────────────────
+
+model LoyaltyTransaction {
+  id           String      @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId       String      @map("user_id") @db.Uuid
+  bookingId    String?     @map("booking_id") @db.Uuid
+  type         LoyaltyType
+  points       Int
+  balanceAfter Int         @map("balance_after")
+  description  String?     @db.Text
+  createdAt    DateTime    @default(now()) @map("created_at") @db.Timestamptz()
+
+  user    User     @relation(fields: [userId], references: [id])
+  booking Booking? @relation(fields: [bookingId], references: [id])
+
+  @@index([userId], map: "idx_loyalty_transactions_user_id")
+  @@index([bookingId], map: "idx_loyalty_transactions_booking_id")
+  @@index([type], map: "idx_loyalty_transactions_type")
+  @@map("loyalty_transactions")
+}
+
+// ──────────────────────────────────────────────
+// 4.11 Support Tickets
+// ──────────────────────────────────────────────
+
+model SupportTicket {
+  id              String         @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  referenceNumber String         @unique @map("reference_number") @db.VarChar(20)
+  userId          String         @map("user_id") @db.Uuid
+  bookingId       String?        @map("booking_id") @db.Uuid
+  assignedTo      String?        @map("assigned_to") @db.Uuid
+  category        TicketCategory
+  priority        TicketPriority @default(MEDIUM)
+  status          TicketStatus   @default(OPEN)
+  subject         String         @db.VarChar(255)
+  createdAt       DateTime       @default(now()) @map("created_at") @db.Timestamptz()
+  updatedAt       DateTime       @default(now()) @updatedAt @map("updated_at") @db.Timestamptz()
+  resolvedAt      DateTime?      @map("resolved_at") @db.Timestamptz()
+
+  user           User           @relation(fields: [userId], references: [id])
+  booking        Booking?       @relation(fields: [bookingId], references: [id])
+  assignedStaff  StaffMember?   @relation(fields: [assignedTo], references: [id], onDelete: SetNull)
+  messages       TicketMessage[]
+
+  @@index([userId], map: "idx_support_tickets_user_id")
+  @@index([status], map: "idx_support_tickets_status")
+  @@index([priority], map: "idx_support_tickets_priority")
+  @@index([assignedTo], map: "idx_support_tickets_assigned_to")
+  @@index([createdAt], map: "idx_support_tickets_created_at")
+  @@map("support_tickets")
+}
+
+model TicketMessage {
+  id            String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  ticketId      String   @map("ticket_id") @db.Uuid
+  senderType    String   @map("sender_type") @db.VarChar(10) // "customer" or "staff"
+  senderStaffId String?  @map("sender_staff_id") @db.Uuid
+  content       String   @db.Text
+  createdAt     DateTime @default(now()) @map("created_at") @db.Timestamptz()
+
+  ticket      SupportTicket @relation(fields: [ticketId], references: [id], onDelete: Cascade)
+  senderStaff StaffMember?  @relation(fields: [senderStaffId], references: [id], onDelete: SetNull)
+
+  @@index([ticketId], map: "idx_ticket_messages_ticket_id")
+  @@map("ticket_messages")
+}
+
+// ──────────────────────────────────────────────
+// 4.12 Maintenance
+// ──────────────────────────────────────────────
+
+model MaintenanceRecord {
+  id                  String          @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  vehicleId           String          @map("vehicle_id") @db.Uuid
+  type                MaintenanceType
+  description         String?         @db.Text
+  cost                Decimal?        @db.Decimal(10, 2)
+  serviceProviderName String?         @map("service_provider_name") @db.VarChar(255)
+  startDate           DateTime        @map("start_date") @db.Date
+  endDate             DateTime?       @map("end_date") @db.Date
+  notes               String?         @db.Text
+  createdByStaffId    String?         @map("created_by_staff_id") @db.Uuid
+  createdAt           DateTime        @default(now()) @map("created_at") @db.Timestamptz()
+  updatedAt           DateTime        @default(now()) @updatedAt @map("updated_at") @db.Timestamptz()
+
+  vehicle        Vehicle      @relation(fields: [vehicleId], references: [id])
+  createdByStaff StaffMember? @relation(fields: [createdByStaffId], references: [id], onDelete: SetNull)
+
+  @@index([vehicleId], map: "idx_maintenance_records_vehicle_id")
+  @@index([startDate], map: "idx_maintenance_records_start_date")
+  @@index([endDate], map: "idx_maintenance_records_end_date")
+  @@map("maintenance_records")
+}
+
+// ──────────────────────────────────────────────
+// 4.13 Documents
+// ──────────────────────────────────────────────
+
+model VehicleDocument {
+  id             String       @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  vehicleId      String       @map("vehicle_id") @db.Uuid
+  type           DocumentType
+  customTypeName String?      @map("custom_type_name") @db.VarChar(100)
+  fileUrl        String       @map("file_url") @db.Text
+  issueDate      DateTime?    @map("issue_date") @db.Date
+  expiryDate     DateTime?    @map("expiry_date") @db.Date
+  notes          String?      @db.Text
+  createdAt      DateTime     @default(now()) @map("created_at") @db.Timestamptz()
+  updatedAt      DateTime     @default(now()) @updatedAt @map("updated_at") @db.Timestamptz()
+
+  vehicle Vehicle @relation(fields: [vehicleId], references: [id])
+
+  @@index([vehicleId], map: "idx_vehicle_documents_vehicle_id")
+  @@index([expiryDate], map: "idx_vehicle_documents_expiry_date")
+  @@index([type], map: "idx_vehicle_documents_type")
+  @@map("vehicle_documents")
+}
+
+model RentalDocument {
+  id          String       @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  bookingId   String       @map("booking_id") @db.Uuid
+  type        RentalDocType
+  fileUrl     String       @map("file_url") @db.Text
+  generatedAt DateTime     @default(now()) @map("generated_at") @db.Timestamptz()
+
+  booking Booking @relation(fields: [bookingId], references: [id])
+
+  @@index([bookingId], map: "idx_rental_documents_booking_id")
+  @@map("rental_documents")
+}
+
+// ──────────────────────────────────────────────
+// 4.14 Configuration
+// ──────────────────────────────────────────────
+
+model BusinessSetting {
+  id               String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  key              String   @unique @db.VarChar(100)
+  value            Json     @db.JsonB
+  description      String?  @db.Text
+  updatedByStaffId String?  @map("updated_by_staff_id") @db.Uuid
+  updatedAt        DateTime @default(now()) @updatedAt @map("updated_at") @db.Timestamptz()
+
+  updatedByStaff StaffMember? @relation(fields: [updatedByStaffId], references: [id], onDelete: SetNull)
+
+  @@map("business_settings")
+}
+
+model PlatformConfig {
+  id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  key       String   @unique @db.VarChar(100)
+  value     Json     @db.JsonB
+  updatedAt DateTime @default(now()) @updatedAt @map("updated_at") @db.Timestamptz()
+
+  @@map("platform_config")
+}
+
+// ──────────────────────────────────────────────
+// 4.15 Marketing & Campaigns
+// ──────────────────────────────────────────────
+
+model Campaign {
+  id             String         @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name           String         @db.VarChar(255)
+  description    String?        @db.Text
+  type           String         @db.VarChar(20) // push_notification, email, promotional
+  targetAudience CampaignTarget @map("target_audience")
+  titleEn        String?        @map("title_en") @db.VarChar(255)
+  titleAr        String?        @map("title_ar") @db.VarChar(255)
+  bodyEn         String?        @map("body_en") @db.Text
+  bodyAr         String?        @map("body_ar") @db.Text
+  deepLink       String?        @map("deep_link") @db.Text
+  discountCodeId String?        @map("discount_code_id") @db.Uuid
+  scheduledAt    DateTime?      @map("scheduled_at") @db.Timestamptz()
+  sentAt         DateTime?      @map("sent_at") @db.Timestamptz()
+  status         CampaignStatus @default(DRAFT)
+  stats          Json?          @db.JsonB
+  createdAt      DateTime       @default(now()) @map("created_at") @db.Timestamptz()
+  updatedAt      DateTime       @default(now()) @updatedAt @map("updated_at") @db.Timestamptz()
+
+  discountCode DiscountCode? @relation(fields: [discountCodeId], references: [id], onDelete: SetNull)
+
+  @@index([status], map: "idx_campaigns_status")
+  @@index([scheduledAt], map: "idx_campaigns_scheduled_at")
+  @@map("campaigns")
+}

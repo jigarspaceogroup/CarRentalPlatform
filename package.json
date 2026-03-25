@@ -1,0 +1,30 @@
+{
+  "name": "car-rental-platform",
+  "version": "1.0.0",
+  "private": true,
+  "description": "White-label car rental platform: mobile app + web dashboard",
+  "scripts": {
+    "dev:api": "pnpm --filter @crp/api dev",
+    "dev:web": "pnpm --filter @crp/web dev",
+    "dev:mobile": "pnpm --filter @crp/mobile start",
+    "build": "pnpm -r build",
+    "build:api": "pnpm --filter @crp/api build",
+    "build:web": "pnpm --filter @crp/web build",
+    "lint": "pnpm -r lint",
+    "lint:fix": "pnpm -r lint:fix",
+    "typecheck": "pnpm -r typecheck",
+    "test": "pnpm -r test",
+    "test:api": "pnpm --filter @crp/api test",
+    "test:web": "pnpm --filter @crp/web test",
+    "clean": "pnpm -r clean && rimraf node_modules",
+    "db:migrate": "pnpm --filter @crp/api db:migrate",
+    "db:seed": "pnpm --filter @crp/api db:seed",
+    "db:studio": "pnpm --filter @crp/api db:studio",
+    "db:generate": "pnpm --filter @crp/api db:generate"
+  },
+  "engines": {
+    "node": ">=20.0.0",
+    "pnpm": ">=9.0.0"
+  },
+  "packageManager": "pnpm@10.32.1"
+}
