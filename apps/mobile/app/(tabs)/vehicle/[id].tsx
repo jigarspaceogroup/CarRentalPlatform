@@ -404,12 +404,14 @@ export default function VehicleDetailScreen() {
         <Button
           title={t('vehicle.bookNow')}
           onPress={() => {
-            // Booking not built yet
+            if (vehicle) {
+              router.push(`/(tabs)/booking/${vehicle.id}`);
+            }
           }}
           variant="primary"
           size="lg"
           fullWidth={false}
-          disabled
+          disabled={vehicle?.status !== 'AVAILABLE'}
           style={styles.ctaButton}
         />
       </View>

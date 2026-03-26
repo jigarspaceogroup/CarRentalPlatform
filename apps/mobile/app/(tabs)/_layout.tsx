@@ -76,6 +76,24 @@ export default function TabsLayout() {
           href: null,
         }}
       />
+      <Tabs.Screen
+        name="booking"
+        options={{
+          href: null,
+        }}
+      />
+      <Tabs.Screen
+        name="payment"
+        options={{
+          href: null,
+        }}
+      />
+      <Tabs.Screen
+        name="booking-detail/[id]"
+        options={{
+          href: null,
+        }}
+      />
     </Tabs>
   );
 }

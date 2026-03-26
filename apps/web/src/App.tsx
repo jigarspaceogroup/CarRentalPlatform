@@ -13,6 +13,11 @@ import { VehicleFormPage } from '@/pages/fleet/VehicleFormPage';
 import { CategoryListPage } from '@/pages/categories/CategoryListPage';
 import { BranchListPage } from '@/pages/branches/BranchListPage';
 import { BranchFormPage } from '@/pages/branches/BranchFormPage';
+import { BookingListPage } from '@/pages/bookings/BookingListPage';
+import { IncomingBookingsPage } from '@/pages/bookings/IncomingBookingsPage';
+import { BookingDetailPage } from '@/pages/bookings/BookingDetailPage';
+import { TransactionListPage } from '@/pages/payments/TransactionListPage';
+import { TransactionDetailPage } from '@/pages/payments/TransactionDetailPage';
 
 function Placeholder({ title }: { title: string }) {
   return (
@@ -40,7 +45,10 @@ export function App() {
         <Route element={<AuthGuard />}>
           <Route element={<DashboardLayout />}>
             <Route index element={<DashboardHomePage />} />
-            <Route path="bookings" element={<Placeholder title="Bookings" />} />
+            {/* Booking Management (CRP-32) */}
+            <Route path="bookings" element={<BookingListPage />} />
+            <Route path="bookings/incoming" element={<IncomingBookingsPage />} />
+            <Route path="bookings/:id" element={<BookingDetailPage />} />
 
             {/* Fleet Management (CRP-22) */}
             <Route path="fleet" element={<VehicleListPage />} />
@@ -57,7 +65,9 @@ export function App() {
             <Route path="branches/:id/edit" element={<BranchFormPage />} />
 
             <Route path="customers" element={<Placeholder title="Customers" />} />
-            <Route path="payments" element={<Placeholder title="Payments" />} />
+            {/* Payment Management (CRP-33) */}
+            <Route path="payments" element={<TransactionListPage />} />
+            <Route path="payments/:id" element={<TransactionDetailPage />} />
             <Route path="maintenance" element={<Placeholder title="Maintenance" />} />
             <Route path="support" element={<Placeholder title="Support" />} />
             <Route path="pricing" element={<Placeholder title="Pricing" />} />
