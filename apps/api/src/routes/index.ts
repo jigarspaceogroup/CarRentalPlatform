@@ -1,19 +1,23 @@
 import { Router } from 'express';
 import { healthRouter } from './health';
+import { authRouter } from './auth';
+import { adminRouter } from './admin';
+import { publicCategoryRouter } from './categories';
+import { publicBranchRouter } from './branches';
 
 export const apiRouter = Router();
 
 // Health check
 apiRouter.use('/health', healthRouter);
 
-// Auth routes (to be added in Sprint 1)
-// apiRouter.use('/auth', authRouter);
-// apiRouter.use('/admin/auth', adminAuthRouter);
+// Customer auth routes
+apiRouter.use('/auth', authRouter);
 
-// Category routes (to be added in Sprint 1)
-// apiRouter.use('/categories', publicCategoryRouter);
-// apiRouter.use('/admin/categories', adminCategoryRouter);
+// Admin routes (staff auth, categories, branches management)
+apiRouter.use('/admin', adminRouter);
 
-// Branch routes (to be added in Sprint 1)
-// apiRouter.use('/branches', publicBranchRouter);
-// apiRouter.use('/admin/branches', adminBranchRouter);
+// Public category routes (customer app)
+apiRouter.use('/categories', publicCategoryRouter);
+
+// Public branch routes (customer app)
+apiRouter.use('/branches', publicBranchRouter);

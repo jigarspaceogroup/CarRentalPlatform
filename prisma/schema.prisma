@@ -301,6 +301,7 @@ model StaffMember {
   updatedAt    DateTime    @default(now()) @updatedAt @map("updated_at") @db.Timestamptz()
 
   // Relations
+  sessions             StaffSession[]
   activityLogs         StaffActivityLog[]
   bookingNotes         BookingNote[]
   bookingStatusChanges BookingStatusHistory[] @relation("StatusChangedByStaff")
@@ -313,6 +314,23 @@ model StaffMember {
 
   @@index([role], map: "idx_staff_members_role")
   @@map("staff_members")
+}
+
+model StaffSession {
+  id           String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  staffId      String   @map("staff_id") @db.Uuid
+  refreshToken String   @unique @map("refresh_token") @db.VarChar(512)
+  userAgent    String?  @map("user_agent") @db.Text
+  ipAddress    String?  @map("ip_address") @db.VarChar(45)
+  expiresAt    DateTime @map("expires_at") @db.Timestamptz()
+  createdAt    DateTime @default(now()) @map("created_at") @db.Timestamptz()
+
+  staff StaffMember @relation(fields: [staffId], references: [id], onDelete: Cascade)
+
+  @@index([staffId], map: "idx_staff_sessions_staff_id")
+  @@index([refreshToken], map: "idx_staff_sessions_refresh_token")
+  @@index([expiresAt], map: "idx_staff_sessions_expires_at")
+  @@map("staff_sessions")
 }
 
 model StaffActivityLog {
