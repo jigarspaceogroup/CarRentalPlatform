@@ -10,6 +10,9 @@ import {
   applyDiscountSchema,
 } from '../validation/booking.schema';
 import * as bookingController from '../controllers/booking.controller';
+import { otpBookingIdParamSchema } from '../validation/otp.schema';
+import * as otpService from '../services/otp.service';
+import { successResponse } from '../utils/response';
 
 export const bookingRouter = Router();
 
@@ -292,4 +295,86 @@ bookingRouter.get(
   '/:id/price-breakdown',
   validate(bookingIdParamSchema, 'params'),
   asyncHandler(bookingController.getPriceBreakdown),
+);
+
+// ---------------------------------------------------------------------------
+// OTP & Contract routes
+// ---------------------------------------------------------------------------
+
+/**
+ * @openapi
+ * /bookings/{id}/contract/sign:
+ *   post:
+ *     tags:
+ *       - Bookings
+ *     summary: Sign digital contract
+ *     description: Sign the digital contract for a booking. Required before OTP can be requested. Only allowed for READY_FOR_PICKUP bookings.
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *           format: uuid
+ *     responses:
+ *       200:
+ *         description: Contract signed successfully
+ *       400:
+ *         description: Contract already signed or invalid booking status
+ *       401:
+ *         description: Unauthorized
+ *       404:
+ *         description: Booking not found
+ */
+bookingRouter.post(
+  '/:id/contract/sign',
+  validate(otpBookingIdParamSchema, 'params'),
+  asyncHandler(async (req, res) => {
+    const booking = await otpService.signContract(
+      req.params.id as string,
+      req.user!.userId,
+    );
+    res.json(successResponse(booking));
+  }),
+);
+
+/**
+ * @openapi
+ * /bookings/{id}/otp/request-new:
+ *   post:
+ *     tags:
+ *       - Bookings
+ *     summary: Request new OTP
+ *     description: Customer requests a new OTP for their booking. Requires contract to be signed and booking to be in READY_FOR_PICKUP or ACTIVE_RENTAL status.
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *           format: uuid
+ *     responses:
+ *       201:
+ *         description: New OTP generated
+ *       400:
+ *         description: Contract not signed or invalid booking status
+ *       401:
+ *         description: Unauthorized
+ *       404:
+ *         description: Booking not found
+ */
+bookingRouter.post(
+  '/:id/otp/request-new',
+  validate(otpBookingIdParamSchema, 'params'),
+  asyncHandler(async (req, res) => {
+    const otp = await otpService.requestNewOtp(
+      req.params.id as string,
+      req.user!.userId,
+    );
+    res.status(201).json(successResponse(otp));
+  }),
 );

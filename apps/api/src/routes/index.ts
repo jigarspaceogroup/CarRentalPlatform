@@ -8,6 +8,7 @@ import { publicVehicleRouter } from './vehicles';
 import { bookingRouter } from './bookings';
 import { vehicleAvailabilityRouter } from './vehicle-availability';
 import { paymentRouter, savedCardRouter } from './payments';
+import { notificationRouter } from './notifications';
 
 export const apiRouter = Router();
 
@@ -40,3 +41,6 @@ apiRouter.use('/payments', paymentRouter);
 
 // Saved card routes (customer)
 apiRouter.use('/saved-cards', savedCardRouter);
+
+// Notification routes (customer)
+apiRouter.use('/notifications', notificationRouter);

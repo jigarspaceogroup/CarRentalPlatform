@@ -6,6 +6,7 @@ import { adminBranchRouter } from './branches';
 import { adminVehicleRouter } from './vehicles';
 import { adminBookingRouter } from './bookings';
 import { adminPaymentRouter } from './payments';
+import { adminOtpRouter } from './otp';
 
 export const adminRouter = Router();
 
@@ -26,6 +27,9 @@ adminRouter.use('/vehicles', adminVehicleRouter);
 
 // Booking management
 adminRouter.use('/bookings', adminBookingRouter);
+
+// OTP management (nested under /bookings/:id/otp)
+adminRouter.use('/bookings', adminOtpRouter);
 
 // Payment & financial management
 adminRouter.use('/payments', adminPaymentRouter);
