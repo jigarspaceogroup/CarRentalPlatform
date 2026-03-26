@@ -5,6 +5,9 @@ import { adminRouter } from './admin';
 import { publicCategoryRouter } from './categories';
 import { publicBranchRouter } from './branches';
 import { publicVehicleRouter } from './vehicles';
+import { bookingRouter } from './bookings';
+import { vehicleAvailabilityRouter } from './vehicle-availability';
+import { paymentRouter, savedCardRouter } from './payments';
 
 export const apiRouter = Router();
 
@@ -25,3 +28,15 @@ apiRouter.use('/branches', publicBranchRouter);
 
 // Public vehicle routes (customer app)
 apiRouter.use('/vehicles', publicVehicleRouter);
+
+// Vehicle availability check (requires auth)
+apiRouter.use('/vehicles', vehicleAvailabilityRouter);
+
+// Customer booking routes
+apiRouter.use('/bookings', bookingRouter);
+
+// Payment routes (customer)
+apiRouter.use('/payments', paymentRouter);
+
+// Saved card routes (customer)
+apiRouter.use('/saved-cards', savedCardRouter);

@@ -4,6 +4,8 @@ import { adminDashboardRouter } from './dashboard';
 import { adminCategoryRouter } from './categories';
 import { adminBranchRouter } from './branches';
 import { adminVehicleRouter } from './vehicles';
+import { adminBookingRouter } from './bookings';
+import { adminPaymentRouter } from './payments';
 
 export const adminRouter = Router();
 
@@ -21,3 +23,9 @@ adminRouter.use('/branches', adminBranchRouter);
 
 // Vehicle fleet management
 adminRouter.use('/vehicles', adminVehicleRouter);
+
+// Booking management
+adminRouter.use('/bookings', adminBookingRouter);
+
+// Payment & financial management
+adminRouter.use('/payments', adminPaymentRouter);
