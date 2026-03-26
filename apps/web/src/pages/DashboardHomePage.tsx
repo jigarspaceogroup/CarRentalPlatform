@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import {
@@ -13,9 +14,11 @@ import {
   RefreshCw,
   AlertCircle,
 } from 'lucide-react';
+import toast from 'react-hot-toast';
 import { Button } from '@/components/ui/Button';
 import { cn } from '@/lib/cn';
 import { useDashboard } from '@/hooks/useDashboard';
+import { useSocket } from '@/hooks/useSocket';
 import type { RecentBooking } from '@/hooks/useDashboard';
 
 // ---------------------------------------------------------------------------
@@ -189,9 +192,40 @@ const kpiCardDefs: KpiCardDef[] = [
 export function DashboardHomePage() {
   const { t } = useTranslation();
   const { data, isLoading, error, refetch } = useDashboard();
+  const { on } = useSocket();
+  const [isLive, setIsLive] = useState(false);
+
+  useEffect(() => {
+    const offNew = on('booking:new', () => {
+      toast.success(t('realtime.newBookingAlert'), { duration: 5000 });
+      refetch();
+    });
+    const offRefresh = on('dashboard:refresh', () => {
+      refetch();
+    });
+    const offConnect = on('connect', () => setIsLive(true));
+    const offDisconnect = on('disconnect', () => setIsLive(false));
+    return () => {
+      offNew?.();
+      offRefresh?.();
+      offConnect?.();
+      offDisconnect?.();
+    };
+  }, [on, refetch, t]);
 
   return (
     <div className="space-y-6">
+      {/* Live indicator */}
+      {isLive && (
+        <div className="flex items-center gap-2">
+          <span className="relative flex h-2.5 w-2.5">
+            <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-green-400 opacity-75" />
+            <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-green-500" />
+          </span>
+          <span className="text-xs font-medium text-green-600">{t('realtime.live')}</span>
+        </div>
+      )}
+
       {/* Error banner */}
       {error && (
         <div className="flex items-center gap-3 rounded-lg border border-red-200 bg-red-50 px-4 py-3">

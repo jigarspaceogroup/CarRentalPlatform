@@ -96,11 +96,26 @@
     }
   },
   "otp": {
-    "title": "Verify Phone",
+    "title": "Vehicle Access Code",
     "subtitle": "Enter the 6-digit code sent to",
     "verifyButton": "Verify",
     "resendCode": "Resend Code",
     "resendIn": "Resend code in {{time}}",
+    "yourCode": "Your OTP Code",
+    "copyCode": "Copy Code",
+    "codeCopied": "Code copied to clipboard!",
+    "expiresIn": "Expires in",
+    "expired": "Code Expired",
+    "requestNew": "Request New Code",
+    "requestFailed": "Failed to request new OTP",
+    "noActiveCode": "No active OTP code",
+    "doNotShare": "Do not share this code with anyone",
+    "lockBoxInstructions": "Lock Box Instructions",
+    "step1": "Go to the vehicle location",
+    "step2": "Find the lock box on the driver door",
+    "step3": "Enter the OTP code on the lock box keypad",
+    "step4": "Take the key from the lock box",
+    "step5": "Start your journey!",
     "errors": {
       "codeRequired": "Please enter the verification code",
       "codeInvalid": "Invalid verification code",
@@ -344,5 +359,40 @@
     "tryAgain": "Try Again",
     "tryDifferentMethod": "Try Different Method",
     "cancelBooking": "Cancel Booking"
+  },
+  "notifications": {
+    "title": "Notifications",
+    "noNotifications": "No notifications yet",
+    "markAllRead": "Mark All as Read",
+    "unread": "unread",
+    "justNow": "Just now",
+    "preferences": "Notification Preferences",
+    "bookingUpdates": "Booking Updates",
+    "bookingUpdatesDesc": "Receive updates about your bookings",
+    "promotional": "Promotional",
+    "promotionalDesc": "Deals, discounts, and offers",
+    "reminders": "Reminders",
+    "remindersDesc": "Return reminders and pickup alerts",
+    "alwaysOn": "Always on"
+  },
+  "tracking": {
+    "title": "Booking Tracking",
+    "statusTimeline": "Status Timeline",
+    "currentStatus": "Current Status",
+    "returnCountdown": "Return In",
+    "days": "days",
+    "hours": "hours",
+    "minutes": "minutes",
+    "signContract": "Sign Contract",
+    "viewOtp": "View Access Code",
+    "contractRequired": "Please sign the contract first"
+  },
+  "contract": {
+    "title": "Digital Contract",
+    "agreementText": "I have read and agree to the rental terms and conditions",
+    "signContract": "Sign Contract",
+    "contractSigned": "Contract Signed",
+    "signedAt": "Signed at {{date}}",
+    "signingFailed": "Failed to sign contract"
   }
 }

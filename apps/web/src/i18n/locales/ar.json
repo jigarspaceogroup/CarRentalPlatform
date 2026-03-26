@@ -111,7 +111,12 @@
     "statusPending": "قيد الانتظار",
     "statusCompleted": "مكتمل",
     "statusOverdue": "متأخر",
-    "statusCancelled": "ملغي"
+    "statusCancelled": "ملغي",
+    "statusConfirmed": "مؤكد",
+    "statusPreparing": "جاري التحضير",
+    "statusReady": "جاهز",
+    "statusReturnPending": "قيد الإرجاع",
+    "statusRejected": "مرفوض"
   },
   "pagination": {
     "showing": "عرض {{start}} إلى {{end}} من {{total}} نتيجة"
@@ -469,5 +474,23 @@
       "debitCard": "بطاقة مدى",
       "cod": "الدفع عند الاستلام"
     }
+  },
+  "otp": {
+    "management": "إدارة رمز التحقق",
+    "currentCode": "الرمز النشط الحالي",
+    "code": "الرمز",
+    "channel": "القناة",
+    "generatedBy": "تم الإنشاء بواسطة",
+    "expiresAt": "ينتهي في",
+    "generateNew": "إنشاء رمز جديد",
+    "generateSuccess": "تم إنشاء رمز التحقق بنجاح",
+    "generateFailed": "فشل إنشاء رمز التحقق",
+    "auditLog": "سجل رموز التحقق",
+    "noOtps": "لم يتم إنشاء رموز تحقق بعد"
+  },
+  "realtime": {
+    "live": "مباشر",
+    "newBookingAlert": "تم استلام حجز جديد!",
+    "viewBooking": "عرض"
   }
 }

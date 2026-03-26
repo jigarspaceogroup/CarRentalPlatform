@@ -28,6 +28,7 @@ import { AcceptBookingModal } from '@/pages/bookings/AcceptBookingModal';
 import { RejectBookingModal } from '@/pages/bookings/RejectBookingModal';
 import { CancelBookingModal } from '@/pages/bookings/CancelBookingModal';
 import { AdvanceStatusModal } from '@/pages/bookings/AdvanceStatusModal';
+import { OtpSection } from '@/pages/bookings/OtpSection';
 import {
   getBookingStatusVariant,
   getBookingStatusLabel,
@@ -362,6 +363,8 @@ export function BookingDetailPage() {
               </div>
             )}
           </div>
+          {/* OTP Management */}
+          <OtpSection bookingId={booking.id} bookingStatus={booking.status} />
         </div>
 
         {/* Right Column: Status Timeline */}
