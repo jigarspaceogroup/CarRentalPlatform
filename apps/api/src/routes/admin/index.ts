@@ -2,6 +2,7 @@ import { Router } from 'express';
 import { adminAuthRouter } from './auth';
 import { adminCategoryRouter } from './categories';
 import { adminBranchRouter } from './branches';
+import { adminVehicleRouter } from './vehicles';
 
 export const adminRouter = Router();
 
@@ -13,3 +14,6 @@ adminRouter.use('/categories', adminCategoryRouter);
 
 // Branch / location management
 adminRouter.use('/branches', adminBranchRouter);
+
+// Vehicle fleet management
+adminRouter.use('/vehicles', adminVehicleRouter);

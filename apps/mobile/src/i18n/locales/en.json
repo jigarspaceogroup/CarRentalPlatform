@@ -1,0 +1,146 @@
+{
+  "common": {
+    "or": "or",
+    "skip": "Skip for Now",
+    "cancel": "Cancel",
+    "confirm": "Confirm",
+    "error": "Error",
+    "success": "Success",
+    "loading": "Loading...",
+    "retry": "Retry",
+    "back": "Back",
+    "next": "Next",
+    "done": "Done",
+    "save": "Save",
+    "email": "Email",
+    "phone": "Phone",
+    "password": "Password",
+    "networkError": "Network error. Please check your connection.",
+    "unknownError": "Something went wrong. Please try again."
+  },
+  "splash": {
+    "loading": "Loading..."
+  },
+  "welcome": {
+    "appName": "Car Rental",
+    "tagline": "Find and book your perfect ride",
+    "getStarted": "Get Started",
+    "login": "Already have an account? Login",
+    "language": "العربية"
+  },
+  "register": {
+    "title": "Create Account",
+    "subtitle": "Sign up to get started",
+    "emailTab": "Email",
+    "phoneTab": "Phone",
+    "emailPlaceholder": "Enter your email",
+    "passwordPlaceholder": "Create a password",
+    "phonePlaceholder": "Phone number",
+    "countryCode": "+966",
+    "registerButton": "Register",
+    "socialGoogle": "Continue with Google",
+    "socialApple": "Continue with Apple",
+    "socialFacebook": "Continue with Facebook",
+    "haveAccount": "Already have an account?",
+    "loginLink": "Login",
+    "checkEmail": "Check Your Email",
+    "checkEmailMessage": "We've sent a verification link to {{email}}. Please check your inbox and verify your email to continue.",
+    "checkEmailDone": "Done",
+    "passwordStrength": {
+      "weak": "Weak",
+      "fair": "Fair",
+      "good": "Good",
+      "strong": "Strong",
+      "minLength": "At least 8 characters",
+      "uppercase": "One uppercase letter",
+      "lowercase": "One lowercase letter",
+      "number": "One number"
+    },
+    "errors": {
+      "emailRequired": "Email is required",
+      "emailInvalid": "Please enter a valid email",
+      "passwordRequired": "Password is required",
+      "passwordWeak": "Password does not meet requirements",
+      "phoneRequired": "Phone number is required",
+      "phoneInvalid": "Please enter a valid phone number",
+      "emailExists": "An account with this email already exists",
+      "phoneExists": "An account with this phone number already exists"
+    }
+  },
+  "login": {
+    "title": "Welcome Back",
+    "subtitle": "Sign in to your account",
+    "emailTab": "Email",
+    "phoneTab": "Phone",
+    "emailPlaceholder": "Enter your email",
+    "passwordPlaceholder": "Enter your password",
+    "phonePlaceholder": "Phone number",
+    "countryCode": "+966",
+    "loginButton": "Login",
+    "socialGoogle": "Continue with Google",
+    "socialApple": "Continue with Apple",
+    "socialFacebook": "Continue with Facebook",
+    "forgotPassword": "Forgot Password?",
+    "noAccount": "Don't have an account?",
+    "registerLink": "Register",
+    "errors": {
+      "emailRequired": "Email is required",
+      "emailInvalid": "Please enter a valid email",
+      "passwordRequired": "Password is required",
+      "phoneRequired": "Phone number is required",
+      "phoneInvalid": "Please enter a valid phone number",
+      "invalidCredentials": "Invalid email or password",
+      "rateLimited": "Too many attempts. Try again in 15 minutes.",
+      "accountLocked": "Your account has been locked. Please contact support."
+    }
+  },
+  "otp": {
+    "title": "Verify Phone",
+    "subtitle": "Enter the 6-digit code sent to",
+    "verifyButton": "Verify",
+    "resendCode": "Resend Code",
+    "resendIn": "Resend code in {{time}}",
+    "errors": {
+      "codeRequired": "Please enter the verification code",
+      "codeInvalid": "Invalid verification code",
+      "codeExpired": "Code has expired. Please request a new one."
+    }
+  },
+  "profileCompletion": {
+    "title": "Complete Your Profile",
+    "subtitle": "Tell us a bit about yourself",
+    "photoLabel": "Add Photo",
+    "fullNameLabel": "Full Name",
+    "fullNamePlaceholder": "Enter your full name",
+    "emailLabel": "Email Address",
+    "emailPlaceholder": "Enter your email",
+    "phoneLabel": "Phone Number",
+    "phonePlaceholder": "Enter your phone number",
+    "licenseLabel": "Driving License Number",
+    "licensePlaceholder": "Enter your license number",
+    "completeButton": "Complete Profile",
+    "skip": "Skip for Now",
+    "errors": {
+      "nameRequired": "Full name is required"
+    }
+  },
+  "home": {
+    "welcome": "Welcome, {{name}}!",
+    "logout": "Logout",
+    "home": "Home"
+  },
+  "forgotPassword": {
+    "title": "Forgot Password",
+    "subtitle": "Enter your email and we'll send you a reset link",
+    "emailPlaceholder": "Enter your email",
+    "sendButton": "Send Reset Link",
+    "backToLogin": "Back to Login",
+    "successTitle": "Email Sent",
+    "successMessage": "Check your email for a password reset link.",
+    "errors": {
+      "emailRequired": "Email is required",
+      "emailInvalid": "Please enter a valid email",
+      "emailNotFound": "No account found with this email"
+    }
+  }
+}
