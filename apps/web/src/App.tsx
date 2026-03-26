@@ -7,6 +7,12 @@ import { LoginPage } from '@/pages/auth/LoginPage';
 import { ForgotPasswordPage } from '@/pages/auth/ForgotPasswordPage';
 import { ResetPasswordPage } from '@/pages/auth/ResetPasswordPage';
 import { DashboardHomePage } from '@/pages/DashboardHomePage';
+import { VehicleListPage } from '@/pages/fleet/VehicleListPage';
+import { VehicleDetailPage } from '@/pages/fleet/VehicleDetailPage';
+import { VehicleFormPage } from '@/pages/fleet/VehicleFormPage';
+import { CategoryListPage } from '@/pages/categories/CategoryListPage';
+import { BranchListPage } from '@/pages/branches/BranchListPage';
+import { BranchFormPage } from '@/pages/branches/BranchFormPage';
 
 function Placeholder({ title }: { title: string }) {
   return (
@@ -35,9 +41,21 @@ export function App() {
           <Route element={<DashboardLayout />}>
             <Route index element={<DashboardHomePage />} />
             <Route path="bookings" element={<Placeholder title="Bookings" />} />
-            <Route path="fleet" element={<Placeholder title="Fleet" />} />
-            <Route path="categories" element={<Placeholder title="Categories" />} />
-            <Route path="branches" element={<Placeholder title="Branches" />} />
+
+            {/* Fleet Management (CRP-22) */}
+            <Route path="fleet" element={<VehicleListPage />} />
+            <Route path="fleet/new" element={<VehicleFormPage />} />
+            <Route path="fleet/:id" element={<VehicleDetailPage />} />
+            <Route path="fleet/:id/edit" element={<VehicleFormPage />} />
+
+            {/* Category Management (CRP-23) */}
+            <Route path="categories" element={<CategoryListPage />} />
+
+            {/* Branch Management (CRP-24) */}
+            <Route path="branches" element={<BranchListPage />} />
+            <Route path="branches/new" element={<BranchFormPage />} />
+            <Route path="branches/:id/edit" element={<BranchFormPage />} />
+
             <Route path="customers" element={<Placeholder title="Customers" />} />
             <Route path="payments" element={<Placeholder title="Payments" />} />
             <Route path="maintenance" element={<Placeholder title="Maintenance" />} />
