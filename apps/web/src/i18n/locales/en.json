@@ -1,0 +1,52 @@
+{
+  "common": {
+    "appName": "Car Rental Platform",
+    "dashboard": "Dashboard",
+    "login": "Login",
+    "logout": "Logout",
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "edit": "Edit",
+    "add": "Add",
+    "search": "Search",
+    "filter": "Filter",
+    "export": "Export",
+    "loading": "Loading...",
+    "noData": "No data found",
+    "confirm": "Confirm",
+    "back": "Back",
+    "next": "Next",
+    "submit": "Submit",
+    "actions": "Actions",
+    "status": "Status",
+    "date": "Date",
+    "total": "Total"
+  },
+  "auth": {
+    "email": "Email",
+    "password": "Password",
+    "forgotPassword": "Forgot Password?",
+    "resetPassword": "Reset Password",
+    "sendResetLink": "Send Reset Link",
+    "loginTitle": "Welcome Back",
+    "loginSubtitle": "Sign in to your dashboard"
+  },
+  "nav": {
+    "home": "Home",
+    "bookings": "Bookings",
+    "fleet": "Fleet",
+    "categories": "Categories",
+    "branches": "Branches",
+    "customers": "Customers",
+    "payments": "Payments",
+    "maintenance": "Maintenance",
+    "support": "Support",
+    "pricing": "Pricing",
+    "analytics": "Analytics",
+    "campaigns": "Campaigns",
+    "staff": "Staff",
+    "settings": "Settings",
+    "configuration": "Configuration"
+  }
+}

@@ -1,0 +1,52 @@
+{
+  "common": {
+    "appName": "منصة تأجير السيارات",
+    "dashboard": "لوحة التحكم",
+    "login": "تسجيل الدخول",
+    "logout": "تسجيل الخروج",
+    "save": "حفظ",
+    "cancel": "إلغاء",
+    "delete": "حذف",
+    "edit": "تعديل",
+    "add": "إضافة",
+    "search": "بحث",
+    "filter": "تصفية",
+    "export": "تصدير",
+    "loading": "جاري التحميل...",
+    "noData": "لا توجد بيانات",
+    "confirm": "تأكيد",
+    "back": "رجوع",
+    "next": "التالي",
+    "submit": "إرسال",
+    "actions": "الإجراءات",
+    "status": "الحالة",
+    "date": "التاريخ",
+    "total": "الإجمالي"
+  },
+  "auth": {
+    "email": "البريد الإلكتروني",
+    "password": "كلمة المرور",
+    "forgotPassword": "نسيت كلمة المرور؟",
+    "resetPassword": "إعادة تعيين كلمة المرور",
+    "sendResetLink": "إرسال رابط إعادة التعيين",
+    "loginTitle": "مرحباً بعودتك",
+    "loginSubtitle": "سجل الدخول إلى لوحة التحكم"
+  },
+  "nav": {
+    "home": "الرئيسية",
+    "bookings": "الحجوزات",
+    "fleet": "الأسطول",
+    "categories": "الفئات",
+    "branches": "الفروع",
+    "customers": "العملاء",
+    "payments": "المدفوعات",
+    "maintenance": "الصيانة",
+    "support": "الدعم",
+    "pricing": "التسعير",
+    "analytics": "التحليلات",
+    "campaigns": "الحملات",
+    "staff": "الموظفين",
+    "settings": "الإعدادات",
+    "configuration": "التكوين"
+  }
+}

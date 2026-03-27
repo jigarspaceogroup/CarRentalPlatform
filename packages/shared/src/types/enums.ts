@@ -1,0 +1,172 @@
+export enum AuthProvider {
+  EMAIL = 'EMAIL',
+  PHONE = 'PHONE',
+  GOOGLE = 'GOOGLE',
+  APPLE = 'APPLE',
+  FACEBOOK = 'FACEBOOK',
+}
+
+export enum UserStatus {
+  ACTIVE = 'ACTIVE',
+  SUSPENDED = 'SUSPENDED',
+  DEACTIVATED = 'DEACTIVATED',
+}
+
+export enum StaffRole {
+  ADMIN = 'ADMIN',
+  MANAGER = 'MANAGER',
+  OPERATOR = 'OPERATOR',
+  SUPPORT = 'SUPPORT',
+}
+
+export enum StaffStatus {
+  ACTIVE = 'ACTIVE',
+  INACTIVE = 'INACTIVE',
+}
+
+export enum VehicleStatus {
+  AVAILABLE = 'AVAILABLE',
+  UNAVAILABLE = 'UNAVAILABLE',
+  IN_MAINTENANCE = 'IN_MAINTENANCE',
+  RETIRED = 'RETIRED',
+}
+
+export enum TransmissionType {
+  AUTOMATIC = 'AUTOMATIC',
+  MANUAL = 'MANUAL',
+}
+
+export enum FuelType {
+  PETROL = 'PETROL',
+  DIESEL = 'DIESEL',
+  ELECTRIC = 'ELECTRIC',
+  HYBRID = 'HYBRID',
+}
+
+export enum BookingStatus {
+  PENDING = 'PENDING',
+  CONFIRMED = 'CONFIRMED',
+  VEHICLE_PREPARING = 'VEHICLE_PREPARING',
+  READY_FOR_PICKUP = 'READY_FOR_PICKUP',
+  ACTIVE_RENTAL = 'ACTIVE_RENTAL',
+  RETURN_PENDING = 'RETURN_PENDING',
+  COMPLETED = 'COMPLETED',
+  CANCELLED = 'CANCELLED',
+  REJECTED = 'REJECTED',
+}
+
+export enum CancellationInitiator {
+  CUSTOMER = 'CUSTOMER',
+  SERVICE_PROVIDER = 'SERVICE_PROVIDER',
+}
+
+export enum OtpStatus {
+  GENERATED = 'GENERATED',
+  DELIVERED = 'DELIVERED',
+  USED = 'USED',
+  EXPIRED = 'EXPIRED',
+  INVALIDATED = 'INVALIDATED',
+}
+
+export enum OtpChannel {
+  SMS = 'SMS',
+  PUSH = 'PUSH',
+  BOTH = 'BOTH',
+}
+
+export enum PaymentMethod {
+  CREDIT_CARD = 'CREDIT_CARD',
+  DEBIT_CARD = 'DEBIT_CARD',
+  CASH_ON_DELIVERY = 'CASH_ON_DELIVERY',
+}
+
+export enum PaymentStatus {
+  PENDING = 'PENDING',
+  COMPLETED = 'COMPLETED',
+  FAILED = 'FAILED',
+  REFUNDED = 'REFUNDED',
+  PARTIALLY_REFUNDED = 'PARTIALLY_REFUNDED',
+}
+
+export enum RefundStatus {
+  PENDING = 'PENDING',
+  PROCESSED = 'PROCESSED',
+  FAILED = 'FAILED',
+}
+
+export enum NotificationType {
+  BOOKING_CONFIRMATION = 'BOOKING_CONFIRMATION',
+  BOOKING_STATUS_CHANGE = 'BOOKING_STATUS_CHANGE',
+  OTP_DELIVERY = 'OTP_DELIVERY',
+  PAYMENT_CONFIRMATION = 'PAYMENT_CONFIRMATION',
+  PROMOTIONAL = 'PROMOTIONAL',
+  SYSTEM = 'SYSTEM',
+}
+
+export enum LoyaltyType {
+  EARNED = 'EARNED',
+  REDEEMED = 'REDEEMED',
+  EXPIRED = 'EXPIRED',
+  ADJUSTED = 'ADJUSTED',
+}
+
+export enum TicketStatus {
+  OPEN = 'OPEN',
+  IN_PROGRESS = 'IN_PROGRESS',
+  RESOLVED = 'RESOLVED',
+  CLOSED = 'CLOSED',
+}
+
+export enum TicketPriority {
+  LOW = 'LOW',
+  MEDIUM = 'MEDIUM',
+  HIGH = 'HIGH',
+}
+
+export enum TicketCategory {
+  BILLING = 'BILLING',
+  VEHICLE_ISSUE = 'VEHICLE_ISSUE',
+  GENERAL_INQUIRY = 'GENERAL_INQUIRY',
+  COMPLAINT = 'COMPLAINT',
+}
+
+export enum DiscountType {
+  PERCENTAGE = 'PERCENTAGE',
+  FIXED_AMOUNT = 'FIXED_AMOUNT',
+}
+
+export enum PricingRuleType {
+  MULTIPLIER = 'MULTIPLIER',
+  FIXED_OVERRIDE = 'FIXED_OVERRIDE',
+}
+
+export enum MaintenanceType {
+  ROUTINE = 'ROUTINE',
+  REPAIR = 'REPAIR',
+  INSPECTION = 'INSPECTION',
+}
+
+export enum DocumentType {
+  INSURANCE = 'INSURANCE',
+  REGISTRATION = 'REGISTRATION',
+  INSPECTION_CERTIFICATE = 'INSPECTION_CERTIFICATE',
+  CUSTOM = 'CUSTOM',
+}
+
+export enum RentalDocType {
+  CONTRACT = 'CONTRACT',
+  RECEIPT = 'RECEIPT',
+}
+
+export enum CampaignStatus {
+  DRAFT = 'DRAFT',
+  ACTIVE = 'ACTIVE',
+  PAUSED = 'PAUSED',
+  COMPLETED = 'COMPLETED',
+}
+
+export enum CampaignTarget {
+  ALL_CUSTOMERS = 'ALL_CUSTOMERS',
+  NEW_CUSTOMERS = 'NEW_CUSTOMERS',
+  REPEAT_CUSTOMERS = 'REPEAT_CUSTOMERS',
+}
