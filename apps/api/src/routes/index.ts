@@ -10,6 +10,9 @@ import { vehicleAvailabilityRouter } from './vehicle-availability';
 import { paymentRouter, savedCardRouter } from './payments';
 import { notificationRouter } from './notifications';
 
+import { addressRouter } from './addresses';
+import { supportContactRouter } from './support-contact';
+
 export const apiRouter = Router();
 
 // Health check
@@ -44,3 +47,9 @@ apiRouter.use('/saved-cards', savedCardRouter);
 
 // Notification routes (customer)
 apiRouter.use('/notifications', notificationRouter);
+
+// Customer address management
+apiRouter.use('/addresses', addressRouter);
+
+// Support contact info
+apiRouter.use('/support-contact', supportContactRouter);

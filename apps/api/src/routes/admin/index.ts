@@ -8,6 +8,10 @@ import { adminBookingRouter } from './bookings';
 import { adminPaymentRouter } from './payments';
 import { adminOtpRouter } from './otp';
 
+import { adminCustomerRouter } from './customers';
+import { adminTicketRouter } from './tickets';
+import { adminSettingsRouter } from './settings';
+
 export const adminRouter = Router();
 
 // Staff authentication (login, refresh, logout, password reset)
@@ -33,3 +37,12 @@ adminRouter.use('/bookings', adminOtpRouter);
 
 // Payment & financial management
 adminRouter.use('/payments', adminPaymentRouter);
+
+// Customer management
+adminRouter.use('/', adminCustomerRouter);
+
+// Support ticket management
+adminRouter.use('/', adminTicketRouter);
+
+// Business settings & platform config
+adminRouter.use('/', adminSettingsRouter);
