@@ -1,10 +1,31 @@
-import { View, Text, StyleSheet } from 'react-native';
+import { useEffect } from 'react';
+import { View, Text, StyleSheet, ActivityIndicator } from 'react-native';
+import { useRouter } from 'expo-router';
+import { useAuthStore } from '../src/stores/auth';
+import { colors } from '../src/theme';
 
-export default function WelcomeScreen() {
+/**
+ * Root index screen - acts as a routing entry point.
+ * Redirects to the appropriate group once auth state is known.
+ */
+export default function IndexScreen() {
+  const router = useRouter();
+  const { isAuthenticated, isInitialized } = useAuthStore();
+
+  useEffect(() => {
+    if (!isInitialized) return;
+
+    if (isAuthenticated) {
+      router.replace('/(tabs)');
+    } else {
+      router.replace('/(auth)/splash');
+    }
+  }, [isAuthenticated, isInitialized, router]);
+
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Car Rental Platform</Text>
-      <Text style={styles.subtitle}>Welcome</Text>
+      <Text style={styles.logo}>CR</Text>
+      <ActivityIndicator size="large" color={colors.white} style={styles.loader} />
     </View>
   );
 }
@@ -14,16 +35,14 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#2563eb',
+    backgroundColor: colors.primary[600],
   },
-  title: {
-    fontSize: 28,
+  logo: {
+    fontSize: 48,
     fontWeight: 'bold',
-    color: '#ffffff',
-    marginBottom: 8,
+    color: colors.white,
   },
-  subtitle: {
-    fontSize: 16,
-    color: '#bfdbfe',
+  loader: {
+    marginTop: 24,
   },
 });

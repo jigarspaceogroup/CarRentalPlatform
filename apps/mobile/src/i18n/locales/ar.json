@@ -1,0 +1,146 @@
+{
+  "common": {
+    "or": "أو",
+    "skip": "تخطي الآن",
+    "cancel": "إلغاء",
+    "confirm": "تأكيد",
+    "error": "خطأ",
+    "success": "نجاح",
+    "loading": "جاري التحميل...",
+    "retry": "إعادة المحاولة",
+    "back": "رجوع",
+    "next": "التالي",
+    "done": "تم",
+    "save": "حفظ",
+    "email": "البريد الإلكتروني",
+    "phone": "الهاتف",
+    "password": "كلمة المرور",
+    "networkError": "خطأ في الشبكة. يرجى التحقق من اتصالك.",
+    "unknownError": "حدث خطأ ما. يرجى المحاولة مرة أخرى."
+  },
+  "splash": {
+    "loading": "جاري التحميل..."
+  },
+  "welcome": {
+    "appName": "تأجير السيارات",
+    "tagline": "ابحث واحجز سيارتك المثالية",
+    "getStarted": "ابدأ الآن",
+    "login": "لديك حساب بالفعل؟ تسجيل الدخول",
+    "language": "English"
+  },
+  "register": {
+    "title": "إنشاء حساب",
+    "subtitle": "سجل للبدء",
+    "emailTab": "البريد الإلكتروني",
+    "phoneTab": "الهاتف",
+    "emailPlaceholder": "أدخل بريدك الإلكتروني",
+    "passwordPlaceholder": "أنشئ كلمة مرور",
+    "phonePlaceholder": "رقم الهاتف",
+    "countryCode": "+966",
+    "registerButton": "تسجيل",
+    "socialGoogle": "المتابعة مع جوجل",
+    "socialApple": "المتابعة مع آبل",
+    "socialFacebook": "المتابعة مع فيسبوك",
+    "haveAccount": "لديك حساب بالفعل؟",
+    "loginLink": "تسجيل الدخول",
+    "checkEmail": "تحقق من بريدك الإلكتروني",
+    "checkEmailMessage": "لقد أرسلنا رابط التحقق إلى {{email}}. يرجى التحقق من صندوق الوارد والتحقق من بريدك الإلكتروني للمتابعة.",
+    "checkEmailDone": "تم",
+    "passwordStrength": {
+      "weak": "ضعيفة",
+      "fair": "مقبولة",
+      "good": "جيدة",
+      "strong": "قوية",
+      "minLength": "٨ أحرف على الأقل",
+      "uppercase": "حرف كبير واحد",
+      "lowercase": "حرف صغير واحد",
+      "number": "رقم واحد"
+    },
+    "errors": {
+      "emailRequired": "البريد الإلكتروني مطلوب",
+      "emailInvalid": "يرجى إدخال بريد إلكتروني صالح",
+      "passwordRequired": "كلمة المرور مطلوبة",
+      "passwordWeak": "كلمة المرور لا تستوفي المتطلبات",
+      "phoneRequired": "رقم الهاتف مطلوب",
+      "phoneInvalid": "يرجى إدخال رقم هاتف صالح",
+      "emailExists": "يوجد حساب بهذا البريد الإلكتروني بالفعل",
+      "phoneExists": "يوجد حساب بهذا الرقم بالفعل"
+    }
+  },
+  "login": {
+    "title": "مرحباً بعودتك",
+    "subtitle": "سجل الدخول إلى حسابك",
+    "emailTab": "البريد الإلكتروني",
+    "phoneTab": "الهاتف",
+    "emailPlaceholder": "أدخل بريدك الإلكتروني",
+    "passwordPlaceholder": "أدخل كلمة المرور",
+    "phonePlaceholder": "رقم الهاتف",
+    "countryCode": "+966",
+    "loginButton": "تسجيل الدخول",
+    "socialGoogle": "المتابعة مع جوجل",
+    "socialApple": "المتابعة مع آبل",
+    "socialFacebook": "المتابعة مع فيسبوك",
+    "forgotPassword": "نسيت كلمة المرور؟",
+    "noAccount": "ليس لديك حساب؟",
+    "registerLink": "تسجيل",
+    "errors": {
+      "emailRequired": "البريد الإلكتروني مطلوب",
+      "emailInvalid": "يرجى إدخال بريد إلكتروني صالح",
+      "passwordRequired": "كلمة المرور مطلوبة",
+      "phoneRequired": "رقم الهاتف مطلوب",
+      "phoneInvalid": "يرجى إدخال رقم هاتف صالح",
+      "invalidCredentials": "بريد إلكتروني أو كلمة مرور غير صالحة",
+      "rateLimited": "محاولات كثيرة جداً. حاول مرة أخرى بعد ١٥ دقيقة.",
+      "accountLocked": "تم قفل حسابك. يرجى التواصل مع الدعم."
+    }
+  },
+  "otp": {
+    "title": "التحقق من الهاتف",
+    "subtitle": "أدخل الرمز المكون من ٦ أرقام المرسل إلى",
+    "verifyButton": "تحقق",
+    "resendCode": "إعادة إرسال الرمز",
+    "resendIn": "إعادة إرسال الرمز خلال {{time}}",
+    "errors": {
+      "codeRequired": "يرجى إدخال رمز التحقق",
+      "codeInvalid": "رمز التحقق غير صالح",
+      "codeExpired": "انتهت صلاحية الرمز. يرجى طلب رمز جديد."
+    }
+  },
+  "profileCompletion": {
+    "title": "أكمل ملفك الشخصي",
+    "subtitle": "أخبرنا قليلاً عن نفسك",
+    "photoLabel": "إضافة صورة",
+    "fullNameLabel": "الاسم الكامل",
+    "fullNamePlaceholder": "أدخل اسمك الكامل",
+    "emailLabel": "البريد الإلكتروني",
+    "emailPlaceholder": "أدخل بريدك الإلكتروني",
+    "phoneLabel": "رقم الهاتف",
+    "phonePlaceholder": "أدخل رقم هاتفك",
+    "licenseLabel": "رقم رخصة القيادة",
+    "licensePlaceholder": "أدخل رقم رخصتك",
+    "completeButton": "إكمال الملف الشخصي",
+    "skip": "تخطي الآن",
+    "errors": {
+      "nameRequired": "الاسم الكامل مطلوب"
+    }
+  },
+  "home": {
+    "welcome": "مرحباً، {{name}}!",
+    "logout": "تسجيل الخروج",
+    "home": "الرئيسية"
+  },
+  "forgotPassword": {
+    "title": "نسيت كلمة المرور",
+    "subtitle": "أدخل بريدك الإلكتروني وسنرسل لك رابط إعادة التعيين",
+    "emailPlaceholder": "أدخل بريدك الإلكتروني",
+    "sendButton": "إرسال رابط إعادة التعيين",
+    "backToLogin": "العودة لتسجيل الدخول",
+    "successTitle": "تم إرسال البريد",
+    "successMessage": "تحقق من بريدك الإلكتروني للحصول على رابط إعادة تعيين كلمة المرور.",
+    "errors": {
+      "emailRequired": "البريد الإلكتروني مطلوب",
+      "emailInvalid": "يرجى إدخال بريد إلكتروني صالح",
+      "emailNotFound": "لم يتم العثور على حساب بهذا البريد الإلكتروني"
+    }
+  }
+}
