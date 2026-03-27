@@ -52,3 +52,6 @@ docker-data/
 *.tgz
 .turbo/
 .cache/
+
+# Linear setup script with API keys
+scripts/setup-linear.mjs
