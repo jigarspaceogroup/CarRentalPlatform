@@ -9,19 +9,22 @@ export interface BookingExtra {
 }
 
 export interface BookingFlowState {
-  // Step 1: Vehicle & Dates
+  // Step 1: Vehicle & Plan
   vehicleId: string | null;
   vehicleName: string | null;
   vehicleImage: string | null;
   dailyRate: number;
   weeklyRate: number | null;
   monthlyRate: number | null;
+  rentalPlan: string | null;
+
+  // Step 2: Dates & Times
   pickupDate: string;
   dropoffDate: string;
   pickupTime: string;
   dropoffTime: string;
 
-  // Step 2: Branches
+  // Step 3: Branches
   pickupBranchId: string | null;
   pickupBranchName: string | null;
   dropoffBranchId: string | null;
@@ -51,6 +54,7 @@ export interface BookingFlowState {
     weeklyRate: number | null;
     monthlyRate: number | null;
   }) => void;
+  setRentalPlan: (plan: string) => void;
   setDates: (pickupDate: string, dropoffDate: string) => void;
   setTimes: (pickupTime: string, dropoffTime: string) => void;
   setPickupBranch: (id: string, name: string) => void;
@@ -72,6 +76,7 @@ const initialState = {
   dailyRate: 0,
   weeklyRate: null,
   monthlyRate: null,
+  rentalPlan: null,
   pickupDate: '',
   dropoffDate: '',
   pickupTime: '09:00',
@@ -103,6 +108,8 @@ export const useBookingStore = create<BookingFlowState>((set) => ({
       weeklyRate: params.weeklyRate,
       monthlyRate: params.monthlyRate,
     }),
+
+  setRentalPlan: (plan) => set({ rentalPlan: plan }),
 
   setDates: (pickupDate, dropoffDate) => set({ pickupDate, dropoffDate }),
 

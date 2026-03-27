@@ -94,6 +94,50 @@ export default function TabsLayout() {
           href: null,
         }}
       />
+      {/* Profile nested routes */}
+      <Tabs.Screen
+        name="profile/edit"
+        options={{
+          href: null,
+        }}
+      />
+      <Tabs.Screen
+        name="profile/addresses"
+        options={{
+          href: null,
+        }}
+      />
+      <Tabs.Screen
+        name="profile/address-form"
+        options={{
+          href: null,
+        }}
+      />
+      <Tabs.Screen
+        name="profile/cards"
+        options={{
+          href: null,
+        }}
+      />
+      <Tabs.Screen
+        name="profile/card-form"
+        options={{
+          href: null,
+        }}
+      />
+      <Tabs.Screen
+        name="profile/language"
+        options={{
+          href: null,
+        }}
+      />
+      {/* Support nested routes */}
+      <Tabs.Screen
+        name="support/emergency"
+        options={{
+          href: null,
+        }}
+      />
     </Tabs>
   );
 }

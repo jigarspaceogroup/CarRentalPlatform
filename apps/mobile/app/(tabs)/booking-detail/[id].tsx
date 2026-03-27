@@ -359,8 +359,8 @@ export default function BookingDetailScreen() {
             onPress={() => setShowCancelForm(true)}
             variant="outline"
             size="lg"
-            textStyle={{ color: colors.red[500] }}
-            style={{ borderColor: colors.red[300] }}
+            textStyle={{ color: colors.red[600] }}
+            style={{ borderColor: colors.red[400] }}
           />
         </View>
       )}

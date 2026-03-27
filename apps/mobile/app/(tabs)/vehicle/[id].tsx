@@ -405,7 +405,8 @@ export default function VehicleDetailScreen() {
           title={t('vehicle.bookNow')}
           onPress={() => {
             if (vehicle) {
-              router.push(`/(tabs)/booking/${vehicle.id}`);
+              // Navigate to plan selection first
+              router.push(`/(tabs)/booking/plan-select?vehicleId=${vehicle.id}`);
             }
           }}
           variant="primary"

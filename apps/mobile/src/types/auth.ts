@@ -5,6 +5,7 @@ export interface User {
   name: string | null;
   avatar: string | null;
   drivingLicenseNumber: string | null;
+  licenseExpiryDate: string | null;
   emailVerified: boolean;
   phoneVerified: boolean;
   role: 'CUSTOMER' | 'ADMIN' | 'STAFF';

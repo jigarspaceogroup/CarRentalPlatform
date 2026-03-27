@@ -5,10 +5,32 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useTranslation } from "react-i18next";
 import { colors, spacing, fontSize, borderRadius, fontWeight } from "../../../src/theme";
 import { useOtp } from "../../../src/hooks/useOtp";
-const CT="Lorem ipsum.";
+
+const CONTRACT_TEXT = `
+RENTAL AGREEMENT
+
+This rental agreement ("Agreement") is entered into between the rental company and the customer.
+
+1. RENTAL TERMS
+The customer agrees to rent the vehicle for the specified period and use it in accordance with all applicable laws and regulations.
+
+2. RESPONSIBILITIES
+The customer is responsible for the vehicle during the rental period and must return it in the same condition as received.
+
+3. INSURANCE
+The rental includes basic insurance coverage. Additional coverage options are available.
+
+4. PAYMENT
+The customer agrees to pay all rental charges, including fuel, tolls, and any applicable fees.
+
+5. CANCELLATION
+Cancellation policies apply as specified in the rental terms.
+
+By signing this agreement, the customer acknowledges reading and accepting all terms and conditions.
+`;
+
 export default function ContractScreen(){
-ABC
-const {id}=useLocalSearchParams();
+const {id}=useLocalSearchParams<{ id?: string }>();
 const {t}=useTranslation();
 const router=useRouter();
 const insets=useSafeAreaInsets();
@@ -16,11 +38,11 @@ const isRTL=I18nManager.isRTL;
 const {signContract,isLoading}=useOtp();
 const [agreed,setAgreed]=useState(false);
 const [signed,setSigned]=useState(false);
-const [signedAt,setSignedAt]=useState(null);
+const [signedAt,setSignedAt]=useState<string|null>(null);
 const handleBack=()=>router.back();
 
 const handleSign=async()=>{
-  if(!id||!agreed) return;
+  if(!id||typeof id !== 'string'||!agreed) return;
   try{
     const result=await signContract(id);
     if(result.success){

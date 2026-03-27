@@ -18,6 +18,11 @@ import { IncomingBookingsPage } from '@/pages/bookings/IncomingBookingsPage';
 import { BookingDetailPage } from '@/pages/bookings/BookingDetailPage';
 import { TransactionListPage } from '@/pages/payments/TransactionListPage';
 import { TransactionDetailPage } from '@/pages/payments/TransactionDetailPage';
+import { CustomerListPage } from '@/pages/customers/CustomerListPage';
+import { CustomerDetailPage } from '@/pages/customers/CustomerDetailPage';
+import { PricingRulesPage } from '@/pages/pricing/PricingRulesPage';
+import { DiscountCodesPage } from '@/pages/pricing/DiscountCodesPage';
+import { RevenueDashboardPage } from '@/pages/pricing/RevenueDashboardPage';
 
 function Placeholder({ title }: { title: string }) {
   return (
@@ -64,13 +69,21 @@ export function App() {
             <Route path="branches/new" element={<BranchFormPage />} />
             <Route path="branches/:id/edit" element={<BranchFormPage />} />
 
-            <Route path="customers" element={<Placeholder title="Customers" />} />
+            {/* Customer Management (Sprint 9) */}
+            <Route path="customers" element={<CustomerListPage />} />
+            <Route path="customers/:id" element={<CustomerDetailPage />} />
+
             {/* Payment Management (CRP-33) */}
             <Route path="payments" element={<TransactionListPage />} />
             <Route path="payments/:id" element={<TransactionDetailPage />} />
+
+            {/* Pricing & Revenue Management (Sprint 9) */}
+            <Route path="pricing/rules" element={<PricingRulesPage />} />
+            <Route path="pricing/discounts" element={<DiscountCodesPage />} />
+            <Route path="pricing/revenue" element={<RevenueDashboardPage />} />
+
             <Route path="maintenance" element={<Placeholder title="Maintenance" />} />
             <Route path="support" element={<Placeholder title="Support" />} />
-            <Route path="pricing" element={<Placeholder title="Pricing" />} />
             <Route path="analytics" element={<Placeholder title="Analytics" />} />
             <Route path="campaigns" element={<Placeholder title="Campaigns" />} />
             <Route path="staff" element={<Placeholder title="Staff" />} />

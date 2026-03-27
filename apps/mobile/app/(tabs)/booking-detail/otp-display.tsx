@@ -15,6 +15,16 @@ import * as Clipboard from 'expo-clipboard';
 import { useOtp } from '@/hooks/useOtp';
 import { useBookingDetail } from '@/hooks/useBookingDetail';
 
+type OtpStatus = 'GENERATED' | 'DELIVERED' | 'USED' | 'EXPIRED';
+
+interface Otp {
+  id: string;
+  code: string;
+  status: OtpStatus;
+  expiresAt: string;
+  createdAt: string;
+}
+
 export default function OtpDisplayScreen() {
   const { t } = useTranslation();
   const { id } = useLocalSearchParams<{ id: string }>();
@@ -26,9 +36,9 @@ export default function OtpDisplayScreen() {
   const [isExpired, setIsExpired] = useState(false);
 
   // Find the active OTP from booking
-  const activeOtp = booking?.otps?.find(
-    (o: any) => o.status === 'GENERATED' || o.status === 'DELIVERED'
-  );
+  const activeOtp = (booking as any)?.otps?.find(
+    (o: Otp) => o.status === 'GENERATED' || o.status === 'DELIVERED'
+  ) as Otp | undefined;
 
   // Countdown timer
   useEffect(() => {
