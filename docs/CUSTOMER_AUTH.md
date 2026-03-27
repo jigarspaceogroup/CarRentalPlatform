@@ -1,0 +1,1 @@
+# Customer Authentication API\n\nImplements customer registration and login endpoints.\n\n## Endpoints\n- POST /auth/register\n- POST /auth/login\n- POST /auth/refresh\n\nSee API documentation for details.
