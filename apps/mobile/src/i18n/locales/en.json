@@ -16,7 +16,8 @@
     "phone": "Phone",
     "password": "Password",
     "networkError": "Network error. Please check your connection.",
-    "unknownError": "Something went wrong. Please try again."
+    "unknownError": "Something went wrong. Please try again.",
+    "noData": "No data available"
   },
   "splash": {
     "loading": "Loading..."
@@ -26,7 +27,7 @@
     "tagline": "Find and book your perfect ride",
     "getStarted": "Get Started",
     "login": "Already have an account? Login",
-    "language": "العربية"
+    "language": "\u0627\u0644\u0639\u0631\u0628\u064a\u0629"
   },
   "register": {
     "title": "Create Account",
@@ -127,7 +128,88 @@
   "home": {
     "welcome": "Welcome, {{name}}!",
     "logout": "Logout",
-    "home": "Home"
+    "home": "Home",
+    "search": "Search vehicles...",
+    "categories": "Categories",
+    "popular": "Popular Vehicles",
+    "pullToRefresh": "Pull to refresh",
+    "viewAll": "View All",
+    "promotions": "Special Offers",
+    "notifications": "Notifications"
+  },
+  "search": {
+    "title": "Search",
+    "placeholder": "Search by make or model...",
+    "noResults": "No vehicles found",
+    "noResultsHint": "Try adjusting your search or filters",
+    "resetFilters": "Reset Filters",
+    "results": "{{count}} vehicle(s) found",
+    "filters": "Filters"
+  },
+  "filter": {
+    "title": "Filters",
+    "priceRange": "Price Range",
+    "transmission": "Transmission",
+    "fuelType": "Fuel Type",
+    "apply": "Apply Filters",
+    "reset": "Reset All",
+    "any": "Any",
+    "automatic": "Automatic",
+    "manual": "Manual",
+    "petrol": "Petrol",
+    "diesel": "Diesel",
+    "electric": "Electric",
+    "hybrid": "Hybrid",
+    "minPrice": "Min Price",
+    "maxPrice": "Max Price",
+    "activeFilters": "{{count}} active"
+  },
+  "vehicle": {
+    "specifications": "Specifications",
+    "pricing": "Pricing",
+    "features": "Features",
+    "rentalTerms": "Rental Terms",
+    "bookNow": "Book Now",
+    "share": "Share",
+    "dailyRate": "Daily Rate",
+    "weeklyRate": "Weekly Rate",
+    "monthlyRate": "Monthly Rate",
+    "longTermRate": "Long Term Rate",
+    "perDay": "/day",
+    "perWeek": "/week",
+    "perMonth": "/month",
+    "seats": "Seats",
+    "doors": "Doors",
+    "transmission": "Transmission",
+    "fuelType": "Fuel Type",
+    "year": "Year",
+    "make": "Make",
+    "model": "Model",
+    "trunk": "Trunk Capacity",
+    "mileage": "Mileage Policy",
+    "branchInfo": "Branch Information",
+    "available": "Available",
+    "unavailable": "Unavailable",
+    "savingsWeekly": "Save {{percent}}% vs daily",
+    "savingsMonthly": "Save {{percent}}% vs daily",
+    "savingsLongTerm": "Save {{percent}}% vs daily"
+  },
+  "sort": {
+    "sortBy": "Sort by",
+    "priceLow": "Price: Low to High",
+    "priceHigh": "Price: High to Low",
+    "newest": "Newest First"
+  },
+  "category": {
+    "vehicles": "Vehicles",
+    "allSubcategories": "All",
+    "noVehicles": "No vehicles in this category"
+  },
+  "tabs": {
+    "home": "Home",
+    "search": "Search",
+    "bookings": "Bookings",
+    "profile": "Profile"
   },
   "forgotPassword": {
     "title": "Forgot Password",
